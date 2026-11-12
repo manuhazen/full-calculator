@@ -1,0 +1,676 @@
+{
+  "project": "Calculator Workspace",
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-12T14:01:27.6732614Z",
+  "features": [
+    {
+      "id": "F001",
+      "title": "Repository initialization, feature tracker, and agent instructions",
+      "phase": 1,
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Root tracker has all required IDs and fields.",
+        "Agent instructions enforce tracker dependencies and Docker gate."
+      ],
+      "verification": {
+        "checks": [
+          {
+            "command": "ConvertFrom-Json; inspect 35 IDs/dependencies and AGENTS.md",
+            "result": "passed",
+            "executedAt": "2026-11-12T14:01:27.6732614Z"
+          }
+        ],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F002",
+      "title": "Docker Compose configuration",
+      "phase": 1,
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [
+        "F001"
+      ],
+      "acceptanceCriteria": [
+        "Compose validates and defines exactly api and web application services with a private network."
+      ],
+      "verification": {
+        "checks": [
+          {
+            "command": "docker compose config --quiet",
+            "result": "passed",
+            "executedAt": "2026-11-12T14:01:27.6732614Z"
+          }
+        ],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F003",
+      "title": "Go backend Dockerfile and minimal bootstrap",
+      "phase": 1,
+      "priority": "high",
+      "status": "in_progress",
+      "dependencies": [
+        "F002"
+      ],
+      "acceptanceCriteria": [
+        "Minimal Go service builds in Docker, reads configuration, serves health, and shuts down gracefully."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F004",
+      "title": "React frontend Dockerfile and minimal bootstrap",
+      "phase": 1,
+      "priority": "high",
+      "status": "in_progress",
+      "dependencies": [
+        "F002"
+      ],
+      "acceptanceCriteria": [
+        "Minimal React TypeScript Vite application builds and starts inside Docker."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F005",
+      "title": "Container networking and Vite API proxy",
+      "phase": 1,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F003",
+        "F004"
+      ],
+      "acceptanceCriteria": [
+        "Browser uses relative /api requests and Vite forwards them to api:8080."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F006",
+      "title": "Development hot reload for both services",
+      "phase": 1,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F005"
+      ],
+      "acceptanceCriteria": [
+        "Host frontend edit is visible without restart.",
+        "Host Go edit is rebuilt automatically and response changes."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F007",
+      "title": "Environment configuration and Docker volume setup",
+      "phase": 1,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F002",
+        "F003",
+        "F004"
+      ],
+      "acceptanceCriteria": [
+        "Environment defaults are documented.",
+        "SQLite data directory is backed by named volume and writable by nonroot API."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F008",
+      "title": "Health checks and Docker verification gate",
+      "phase": 1,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F005",
+        "F006",
+        "F007"
+      ],
+      "acceptanceCriteria": [
+        "Docker build, startup, browser page, direct/proxied health, both watchers, logs, and restart checks pass.",
+        "No business features start before this gate passes."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F009",
+      "title": "Go backend architecture and configuration",
+      "phase": 2,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F008"
+      ],
+      "acceptanceCriteria": [
+        "Configuration validates environment and handlers, repository, and engine responsibilities remain separate."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F010",
+      "title": "SQLite schema and migrations",
+      "phase": 2,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F009"
+      ],
+      "acceptanceCriteria": [
+        "Embedded versioned SQL migrations run transactionally and idempotently.",
+        "Foreign keys, WAL, and busy timeout are enabled."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F011",
+      "title": "Thread models and repository",
+      "phase": 2,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F010"
+      ],
+      "acceptanceCriteria": [
+        "Thread repository persists names and timestamps using parameterized SQL."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F012",
+      "title": "Thread management API",
+      "phase": 2,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F011",
+        "F013"
+      ],
+      "acceptanceCriteria": [
+        "Thread list/create/get/rename/delete endpoints return correct status codes and cascade history deletion."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F013",
+      "title": "Centralized request validation",
+      "phase": 2,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F009"
+      ],
+      "acceptanceCriteria": [
+        "Strict JSON limits, unknown/trailing field rejection, canonical UUIDs and trimmed thread names are enforced."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F014",
+      "title": "Basic arithmetic calculation engine",
+      "phase": 3,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F008",
+        "F013"
+      ],
+      "acceptanceCriteria": [
+        "Add/subtract/multiply/divide use decimal arithmetic independently of HTTP and database."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F015",
+      "title": "Advanced arithmetic calculation engine",
+      "phase": 3,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F014"
+      ],
+      "acceptanceCriteria": [
+        "Power, sqrt, percent follow documented semantics and integer exponent bounds."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F016",
+      "title": "Unified calculation endpoint",
+      "phase": 3,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F012",
+        "F015"
+      ],
+      "acceptanceCriteria": [
+        "All seven operations use one POST /api/v1/calculations endpoint with decimal strings."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F017",
+      "title": "Calculation history persistence and retrieval",
+      "phase": 3,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F016"
+      ],
+      "acceptanceCriteria": [
+        "Successful calculations persist original operands, expression, result, timestamp and thread association.",
+        "History is chronologically ordered and isolated by thread."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F018",
+      "title": "Error handling and numerical edge cases",
+      "phase": 3,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F017"
+      ],
+      "acceptanceCriteria": [
+        "Stable error envelopes cover domain errors, invalid operands, bounds, rounding and malformed requests."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F019",
+      "title": "Tailwind and shadcn/ui setup",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F008",
+        "F018"
+      ],
+      "acceptanceCriteria": [
+        "Tailwind, accessible shadcn components and Lucide icons are integrated."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F020",
+      "title": "Responsive application layout",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F019"
+      ],
+      "acceptanceCriteria": [
+        "Desktop sidebar/workspace and mobile drawer are responsive and keyboard accessible."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F021",
+      "title": "Calculator display and keypad",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F020"
+      ],
+      "acceptanceCriteria": [
+        "Classic keypad supports string input, operations, clear, backspace and backend-only calculation."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F022",
+      "title": "Backend API client and TanStack Query integration",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F020",
+        "F018"
+      ],
+      "acceptanceCriteria": [
+        "Typed API client and TanStack Query centralize requests, mutations and cache updates."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F023",
+      "title": "Thread management interface",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F022"
+      ],
+      "acceptanceCriteria": [
+        "Users create, select, rename and confirm deletion of persistent threads."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F024",
+      "title": "Calculation history interface",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F021",
+        "F023"
+      ],
+      "acceptanceCriteria": [
+        "History shows expressions, results, timestamps and useful empty states."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F025",
+      "title": "Result reuse and keyboard interactions",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F024"
+      ],
+      "acceptanceCriteria": [
+        "History results can be reused and keyboard controls work without intercepting dialogs/text fields."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F026",
+      "title": "Loading, empty, validation, and error states",
+      "phase": 4,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F025"
+      ],
+      "acceptanceCriteria": [
+        "Loading, empty, validation and network error states preserve input and prevent duplicate submission."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F027",
+      "title": "Backend calculation unit tests",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F014",
+        "F015",
+        "F018"
+      ],
+      "acceptanceCriteria": [
+        "Table-driven engine tests cover all operations, zero/negative operands, rounding and numeric bounds."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F028",
+      "title": "Backend API and persistence integration tests",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F012",
+        "F017",
+        "F018"
+      ],
+      "acceptanceCriteria": [
+        "httptest with temporary SQLite covers CRUD, persistence, isolation, cascade, JSON validation and statuses."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F029",
+      "title": "Frontend component and interaction tests",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F026"
+      ],
+      "acceptanceCriteria": [
+        "User-visible frontend interaction tests cover calculator, thread CRUD, history, reuse and errors."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F030",
+      "title": "Docker-based integration and persistence checks",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F027",
+        "F028",
+        "F029"
+      ],
+      "acceptanceCriteria": [
+        "All operations work through frontend proxy.",
+        "Data survives container recreation without deleting named volumes."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F031",
+      "title": "Accessibility, responsive, lint, type-check, and build verification",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F030"
+      ],
+      "acceptanceCriteria": [
+        "Go tests/vet, frontend tests/typecheck/lint/build pass.",
+        "Mobile/desktop and keyboard accessibility are reviewed."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F032",
+      "title": "README and API documentation",
+      "phase": 6,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F031"
+      ],
+      "acceptanceCriteria": [
+        "README documents architecture, API examples, operations, numeric limitations and intentional authentication exclusion."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F033",
+      "title": "Docker development instructions and environment examples",
+      "phase": 6,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F008",
+        "F032"
+      ],
+      "acceptanceCriteria": [
+        "Docker-only startup/test workflow, environment variables, watcher behavior and volume preservation are documented."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F034",
+      "title": "Optional production-oriented container builds",
+      "phase": 6,
+      "priority": "low",
+      "status": "not_started",
+      "dependencies": [
+        "F031"
+      ],
+      "acceptanceCriteria": [
+        "Runtime build targets exclude development tooling and route frontend API requests appropriately."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    },
+    {
+      "id": "F035",
+      "title": "Final cleanup and complete verification",
+      "phase": 6,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F032",
+        "F033",
+        "F034"
+      ],
+      "acceptanceCriteria": [
+        "Full verification suite has recorded evidence.",
+        "Feature statuses reflect actual verified state and limitations are reported."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": []
+    }
+  ]
+}
