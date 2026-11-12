@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:23:21.8442800Z",
+  "updatedAt": "2026-11-12T14:24:32.6284467Z",
   "features": [
     {
       "id": "F001",
@@ -103,7 +103,7 @@
       "title": "Container networking and Vite API proxy",
       "phase": 1,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F003",
         "F004"
@@ -112,7 +112,13 @@
         "Browser uses relative /api requests and Vite forwards them to api:8080."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web sh -c wget direct api health and localhost Vite /api/v1/health",
+            "result": "passed: both returned status ok; browser client uses relative API path",
+            "executedAt": "2026-11-12T14:24:32.6203128Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
