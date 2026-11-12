@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:55:19.1001174Z",
+  "updatedAt": "2026-11-12T15:58:08.2038062Z",
   "features": [
     {
       "id": "F001",
@@ -488,7 +488,7 @@
       "title": "Responsive application layout",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F019"
       ],
@@ -496,7 +496,13 @@
         "Desktop sidebar/workspace and mobile drawer are responsive and keyboard accessible."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: typecheck/test/build; Docker Playwright scripts/layout-check.cjs",
+            "result": "passed: sidebar/workspace shell at1440/768/390/320px, mobile drawer open/Escape focus restore, no horizontal overflow; 2 component tests, typecheck and build",
+            "executedAt": "2026-11-12T15:58:08.2038062Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

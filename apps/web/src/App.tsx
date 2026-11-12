@@ -1,12 +1,8 @@
-import { useEffect, useState } from 'react'
+import { Calculator } from 'lucide-react'
+import { WorkspaceLayout } from './components/workspace-layout'
 
 export default function App() {
-  const [health, setHealth] = useState('Connecting to API…')
-  useEffect(() => {
-    fetch('/api/v1/health').then(response => {
-      if (!response.ok) throw new Error('API health check failed')
-      return response.json() as Promise<{ message: string }>
-    }).then(data => setHealth(data.message)).catch(() => setHealth('API is unavailable'))
-  }, [])
-  return <main style={{ fontFamily: 'system-ui', maxWidth: 720, margin: '10vh auto', padding: 24 }}><h1>Calculator Workspace</h1><p>Docker development environment</p><p role="status">{health}</p></main>
+  return <WorkspaceLayout navigation={() => <nav aria-label="Calculation threads" className="thread-navigation"><p className="nav-heading">Your threads</p><p className="sidebar-empty">Your calculation threads will appear here.</p></nav>}>
+    <main id="workspace" className="workspace-body"><div className="workspace-empty"><Calculator size={32} strokeWidth={1.4} /><h1>Your calculation workspace</h1><p>Keep related calculations together in their own thread.</p></div></main>
+  </WorkspaceLayout>
 }
