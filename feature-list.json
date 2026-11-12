@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:04:43.7781966Z",
+  "updatedAt": "2026-11-12T16:10:44.5614711Z",
   "features": [
     {
       "id": "F001",
@@ -561,7 +561,7 @@
       "title": "Thread management interface",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F022"
       ],
@@ -569,7 +569,13 @@
         "Users create, select, rename and confirm deletion of persistent threads."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run; npm run build",
+            "result": "passed:12tests including threadcreate/trimmedrename/validation/deleteconfirmation, independentlypreserved drafts/selection, selectedthreadAPI submission andserverresult; types/lint/build",
+            "executedAt": "2026-11-12T16:10:44.5614711Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

@@ -69,6 +69,37 @@ svg { flex-shrink: 0; }
 .equals-key:hover:not(:disabled) { background: #184f43; }
 .calc-key:disabled, .advanced-key:disabled { opacity: .45; cursor: not-allowed; }
 .calculator-hint { display: flex; align-items: center; justify-content: center; color: #747b6e; font-size: 11px; margin: 18px 0 0; }
+.new-thread-button { width: calc(100% - 12px); margin: 5px 6px 0; justify-content: flex-start; background: #fafbf7; color: #43563a; border-color: #d4dbcc; font-size: 12px; }
+.nav-heading { display: flex; justify-content: space-between; }
+.nav-heading span { color: #858b7f; font-size: 11px; }
+.thread-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.thread-row { position: relative; display: flex; min-width: 0; border-radius: 9px; }
+.thread-row:hover { background: #e8ece3; }
+.thread-row[data-selected] { background: #e1e8d9; }
+.thread-select { display: flex; align-items: center; gap: 9px; width: 100%; min-width: 0; min-height: 48px; padding: 10px 66px 10px 10px; color: #686f61; text-align: left; background: transparent; border: 0; border-radius: 9px; font-size: 12px; }
+.thread-select span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-row[data-selected] .thread-select { color: #3a5432; font-weight: 550; }
+.thread-row-actions { position: absolute; right: 4px; top: 8px; display: flex; opacity: 0; }
+.thread-row:hover .thread-row-actions, .thread-row:focus-within .thread-row-actions, .thread-row[data-selected] .thread-row-actions { opacity: 1; }
+.thread-row-actions button { display: grid; place-items: center; width: 28px; height: 32px; border: 0; border-radius: 6px; background: transparent; color: #64715a; }
+.thread-row-actions button:hover { background: #d0dbc5; }
+.thread-row-actions button:disabled { opacity: .35; }
+.workspace-heading { display: flex; align-items: flex-start; gap: 20px; justify-content: space-between; margin: 0 0 34px; min-height: 66px; }
+.workspace-heading > div:first-child { min-width: 0; }
+.workspace-heading h1 { font-size: clamp(25px, 2.5vw, 31px); letter-spacing: -.035em; line-height: 1.25; font-weight: 550; margin: 0; overflow-wrap: anywhere; }
+.workspace-heading p { font-size: 13px; color: #7a8072; margin: 9px 0 0; }
+.workspace-actions { display: flex; flex-shrink: 0; gap: 2px; margin-top: -5px; }
+.workspace-grid { display: grid; grid-template-columns: minmax(280px, 420px) minmax(0, 1fr); column-gap: 64px; align-items: start; }
+.calculator-column { min-width: 0; }
+.field-label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 550; color: #4f574a; }
+.text-field { width: 100%; min-height: 45px; border-radius: 8px; border: 1px solid #c9d1c2; padding: 10px 12px; outline-color: #0f766e; color: #2f392a; }
+.text-field[aria-invalid=true] { border-color: #b91c1c; }
+.dialog-content .field-error { font-size: 12px; margin: 9px 0 0; color: #b42323; }
+.error-banner { display: flex; align-items: flex-start; gap: 10px; border: 1px solid #edc6be; border-radius: 10px; padding: 13px 15px; background: #fff5f1; color: #9b3828; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+.error-banner svg { margin-top: 1px; }
+.calculation-error { margin: 18px 0 0; max-width: 420px; }
+@media (max-width: 1199px) { .workspace-grid { grid-template-columns: minmax(0,1fr); row-gap: 44px; } }
+@media (max-width: 767px) { .workspace-heading { margin-bottom: 25px; gap: 8px; } .workspace-heading p { max-width: 220px; } .workspace-actions { gap: 0; } .thread-row-actions { opacity: 1; top: 2px; } .thread-row-actions button { width: 40px; height: 44px; } .thread-select { padding-right: 90px; } .calculator { max-width: none; } .calc-key { height: 62px; } }
 @media (max-width: 1050px) and (min-width: 768px) { .app-shell { grid-template-columns: 224px minmax(0, 1fr); } .workspace-body { padding-inline: 32px; } }
 @media (max-width: 767px) { .app-shell { display: block; } .desktop-sidebar { display: none; } .mobile-bar { display: flex; justify-content: space-between; align-items: center; min-height: 76px; padding-right: 16px; border-bottom: 1px solid #e4e5df; background: #fafaf8; } .mobile-bar .brand { padding: 18px 20px; } .mobile-bar .brand-mark { height: 34px; width: 32px; } .workspace-body { padding: 24px 20px 32px; } .workspace-empty { min-height: 65dvh; } }
 @media (max-width: 360px) { .workspace-body { padding-inline: 14px; } }
