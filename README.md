@@ -35,6 +35,47 @@ docker compose down
 
 `up` starts both services and waits for API health before starting the frontend. The first build downloads dependencies; subsequent starts reuse container dependency/cache volumes. Both services run as nonroot users. Stopping or recreating containers preserves the SQLite named volume. **`docker compose down -v` deletes named volumes, including saved calculations**; it is not part of normal development or verification.
 
+## Environment and Docker development workflow
+
+All values have defaults. To customize them, copy `.env.example` to `.env` and edit the values. `.env` is ignored by Git; no application secrets are required.
+
+| Variable           | Default                 | Purpose                                                                                    |
+| ------------------ | ----------------------- | ------------------------------------------------------------------------------------------ |
+| `WEB_PORT`         | `5173`                  | Host port for the application origin                                                       |
+| `API_PORT`         | `8080`                  | Host port for direct development API access                                                |
+| `API_ADDR`         | `:8080`                 | Go listener inside the API container; keep `:8080` with the supplied Compose configuration |
+| `DATABASE_PATH`    | `/data/calculator.db`   | SQLite file; keep it under `/data` to use the persistent volume                            |
+| `API_PROXY_TARGET` | `http://api:8080`       | Vite's server-side proxy target, never a browser API base URL                              |
+| `WATCH_POLLING`    | `true`                  | Vite file polling; set `false` on filesystems with reliable native watch events            |
+| `FRONTEND_ORIGIN`  | `http://localhost:5173` | Exact allowed browser origin when optional CORS is enabled                                 |
+| `ENABLE_CORS`      | `false`                 | Enable origin-restricted direct cross-origin API requests only when needed                 |
+
+Changing a host port does not change the internal container port. If `WEB_PORT` changes, open that new application URL and update `FRONTEND_ORIGIN` when using CORS. Changing the internal Go listener additionally requires coordinated proxy, published-port, and health-check changes. The normal frontend-origin workflow needs no CORS.
+
+Source directories are bind-mounted. Vite provides frontend HMR; Air rebuilds Go after changes to `.go`, `.sql`, `go.mod`, or `go.sum`. Air uses polling, a debounce/unchanged-file filter, and a shutdown grace period so rapid edits replace the running binary cleanly. Windows/WSL polling is intentional. Dependency/cache volumes keep host and container installations separate:
+
+- `sqlite_data` → `/data`: saved names and calculation history, owned by API UID/GID `10001`.
+- `web_dependencies` → frontend `node_modules`: isolated JavaScript dependencies.
+- `go_modules` and `go_build`: reusable Go module and compilation caches.
+
+Apply dependency, Dockerfile, or environment changes with `docker compose up -d --build --wait`. Ordinary source edits need no manual container restart. For an interrupted Vite configuration/entry-module change, `docker compose restart web` clears its module graph. Check `docker compose logs -f api` for the latest successful API startup after Go edits.
+
+Use tools inside containers for dependency maintenance. On bind mounts where a root-created lockfile prevents an npm update, these commands update packages and then restore nonroot ownership of dependency/cache directories:
+
+```sh
+docker compose exec --user root web npm install
+docker compose exec --user root web chown -R node:node /app/node_modules /home/node/.npm
+```
+
+The application still runs as the nonroot `node` user. Do not replace the normal workflow with a host Node installation.
+
+### Troubleshooting
+
+- If a host port is already occupied, change `WEB_PORT` or `API_PORT` in `.env` and recreate the services.
+- If the page reports a connection error, check `docker compose ps` and `docker compose logs api web`. The API must be healthy before the frontend proxy can succeed.
+- If edits are not reflected on Windows/WSL, keep `WATCH_POLLING=true` and inspect Air/Vite logs. Restart/rebuild after changing watcher configuration itself.
+- Recreating containers preserves data; deleting the named volume does not. Keep the same Compose project name when switching development/production so both configurations use `calculator-workspace_sqlite_data`.
+
 ## Using the workspace
 
 Create a thread, optionally rename it, and enter numbers with the keypad or keyboard. Select an operation, enter its second operand, and press **Enter** or **=**. Square root and percentage operate immediately on the current value when no binary operation is pending.
