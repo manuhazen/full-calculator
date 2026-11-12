@@ -36,3 +36,11 @@ docker compose exec web npm run build
 ```
 
 The feature tracker records which checks actually ran and any blockers. A running Docker daemon alone does not prove the application verification gate has passed.
+
+The initial Docker gate passed: both image builds and service health, rendered React/proxied API health, frontend HMR without a full reload, automatic backend rebuild (including restoration), readable logs, nonroot volume permissions, and stop/start recovery. Browser checks used Chromium in a Docker container because the native browser host was unavailable. The reproducible bootstrap-only test is `scripts/docker-gate.cjs`:
+
+```sh
+docker run --rm --network calculator-workspace_workspace -v "${PWD}:/workspace" mcr.microsoft.com/playwright:v1.56.1-noble sh -c "npm install --prefix /tmp/browser playwright@1.56.1 --no-audit --no-fund && node /workspace/scripts/docker-gate.cjs"
+```
+
+This test temporarily edits and restores bootstrap source files; do not edit them concurrently. Changing entry modules/configuration during scaffolding may require a one-time Vite restart to clear its refresh module graph. Normal component edits are verified to preserve the page through HMR.

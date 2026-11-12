@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:49:01.7108870Z",
+  "updatedAt": "2026-11-12T14:50:02.4134480Z",
   "features": [
     {
       "id": "F001",
@@ -183,7 +183,7 @@
       "title": "Health checks and Docker verification gate",
       "phase": 1,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F005",
         "F006",
@@ -194,10 +194,20 @@
         "No business features start before this gate passes."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose build; docker compose up -d --wait; Docker Playwright scripts/docker-gate.cjs; docker compose stop; docker compose up -d --wait; docker compose ps; docker compose logs; docker compose exec web npm run build",
+            "result": "passed: both builds, startup, rendered React, direct/proxied health, frontend HMR without reload, Go automatic rebuild, readable logs, nonroot data permissions, complete stop/start recovery, frontend TypeScript/production bootstrap build",
+            "executedAt": "2026-11-12T14:50:02.4134480Z"
+          }
+        ],
         "blocker": null
       },
-      "notes": []
+      "notes": [
+        "Docker gate fully passed before starting any business logic.",
+        "SQLite persistence across recreation will be verified after SQLite feature integration; no named volumes were deleted.",
+        "Native browser host unavailable; actual headless Chromium browser verification ran inside Docker."
+      ]
     },
     {
       "id": "F009",
