@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:29:56.9786801Z",
+  "updatedAt": "2026-11-12T16:38:33.2599093Z",
   "features": [
     {
       "id": "F001",
@@ -32,9 +32,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F001"
-      ],
+      "dependencies": ["F001"],
       "acceptanceCriteria": [
         "Compose validates and defines exactly api and web application services with a private network."
       ],
@@ -56,9 +54,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F002"
-      ],
+      "dependencies": ["F002"],
       "acceptanceCriteria": [
         "Minimal Go service builds in Docker, reads configuration, serves health, and shuts down gracefully."
       ],
@@ -80,9 +76,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F002"
-      ],
+      "dependencies": ["F002"],
       "acceptanceCriteria": [
         "Minimal React TypeScript Vite application builds and starts inside Docker."
       ],
@@ -104,10 +98,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F003",
-        "F004"
-      ],
+      "dependencies": ["F003", "F004"],
       "acceptanceCriteria": [
         "Browser uses relative /api requests and Vite forwards them to api:8080."
       ],
@@ -129,9 +120,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F005"
-      ],
+      "dependencies": ["F005"],
       "acceptanceCriteria": [
         "Host frontend edit is visible without restart.",
         "Host Go edit is rebuilt automatically and response changes."
@@ -157,11 +146,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F002",
-        "F003",
-        "F004"
-      ],
+      "dependencies": ["F002", "F003", "F004"],
       "acceptanceCriteria": [
         "Environment defaults are documented.",
         "SQLite data directory is backed by named volume and writable by nonroot API."
@@ -184,11 +169,7 @@
       "phase": 1,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F005",
-        "F006",
-        "F007"
-      ],
+      "dependencies": ["F005", "F006", "F007"],
       "acceptanceCriteria": [
         "Docker build, startup, browser page, direct/proxied health, both watchers, logs, and restart checks pass.",
         "No business features start before this gate passes."
@@ -215,9 +196,7 @@
       "phase": 2,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F008"
-      ],
+      "dependencies": ["F008"],
       "acceptanceCriteria": [
         "Configuration validates environment and handlers, repository, and engine responsibilities remain separate."
       ],
@@ -239,9 +218,7 @@
       "phase": 2,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F009"
-      ],
+      "dependencies": ["F009"],
       "acceptanceCriteria": [
         "Embedded versioned SQL migrations run transactionally and idempotently.",
         "Foreign keys, WAL, and busy timeout are enabled."
@@ -266,9 +243,7 @@
       "phase": 2,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F010"
-      ],
+      "dependencies": ["F010"],
       "acceptanceCriteria": [
         "Thread repository persists names and timestamps using parameterized SQL."
       ],
@@ -290,10 +265,7 @@
       "phase": 2,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F011",
-        "F013"
-      ],
+      "dependencies": ["F011", "F013"],
       "acceptanceCriteria": [
         "Thread list/create/get/rename/delete endpoints return correct status codes and cascade history deletion."
       ],
@@ -315,9 +287,7 @@
       "phase": 2,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F009"
-      ],
+      "dependencies": ["F009"],
       "acceptanceCriteria": [
         "Strict JSON limits, unknown/trailing field rejection, canonical UUIDs and trimmed thread names are enforced."
       ],
@@ -339,10 +309,7 @@
       "phase": 3,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F008",
-        "F013"
-      ],
+      "dependencies": ["F008", "F013"],
       "acceptanceCriteria": [
         "Add/subtract/multiply/divide use decimal arithmetic independently of HTTP and database."
       ],
@@ -364,9 +331,7 @@
       "phase": 3,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F014"
-      ],
+      "dependencies": ["F014"],
       "acceptanceCriteria": [
         "Power, sqrt, percent follow documented semantics and integer exponent bounds."
       ],
@@ -388,10 +353,7 @@
       "phase": 3,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F012",
-        "F015"
-      ],
+      "dependencies": ["F012", "F015"],
       "acceptanceCriteria": [
         "All seven operations use one POST /api/v1/calculations endpoint with decimal strings."
       ],
@@ -413,9 +375,7 @@
       "phase": 3,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F016"
-      ],
+      "dependencies": ["F016"],
       "acceptanceCriteria": [
         "Successful calculations persist original operands, expression, result, timestamp and thread association.",
         "History is chronologically ordered and isolated by thread."
@@ -438,9 +398,7 @@
       "phase": 3,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F017"
-      ],
+      "dependencies": ["F017"],
       "acceptanceCriteria": [
         "Stable error envelopes cover domain errors, invalid operands, bounds, rounding and malformed requests."
       ],
@@ -462,10 +420,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F008",
-        "F018"
-      ],
+      "dependencies": ["F008", "F018"],
       "acceptanceCriteria": [
         "Tailwind, accessible shadcn components and Lucide icons are integrated."
       ],
@@ -489,9 +444,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F019"
-      ],
+      "dependencies": ["F019"],
       "acceptanceCriteria": [
         "Desktop sidebar/workspace and mobile drawer are responsive and keyboard accessible."
       ],
@@ -513,9 +466,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F020"
-      ],
+      "dependencies": ["F020"],
       "acceptanceCriteria": [
         "Classic keypad supports string input, operations, clear, backspace and backend-only calculation."
       ],
@@ -537,10 +488,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F020",
-        "F018"
-      ],
+      "dependencies": ["F020", "F018"],
       "acceptanceCriteria": [
         "Typed API client and TanStack Query centralize requests, mutations and cache updates."
       ],
@@ -562,9 +510,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F022"
-      ],
+      "dependencies": ["F022"],
       "acceptanceCriteria": [
         "Users create, select, rename and confirm deletion of persistent threads."
       ],
@@ -586,10 +532,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F021",
-        "F023"
-      ],
+      "dependencies": ["F021", "F023"],
       "acceptanceCriteria": [
         "History shows expressions, results, timestamps and useful empty states."
       ],
@@ -611,9 +554,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F024"
-      ],
+      "dependencies": ["F024"],
       "acceptanceCriteria": [
         "History results can be reused and keyboard controls work without intercepting dialogs/text fields."
       ],
@@ -635,9 +576,7 @@
       "phase": 4,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F025"
-      ],
+      "dependencies": ["F025"],
       "acceptanceCriteria": [
         "Loading, empty, validation and network error states preserve input and prevent duplicate submission."
       ],
@@ -661,11 +600,7 @@
       "phase": 5,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F014",
-        "F015",
-        "F018"
-      ],
+      "dependencies": ["F014", "F015", "F018"],
       "acceptanceCriteria": [
         "Table-driven engine tests cover all operations, zero/negative operands, rounding and numeric bounds."
       ],
@@ -687,11 +622,7 @@
       "phase": 5,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F012",
-        "F017",
-        "F018"
-      ],
+      "dependencies": ["F012", "F017", "F018"],
       "acceptanceCriteria": [
         "httptest with temporary SQLite covers CRUD, persistence, isolation, cascade, JSON validation and statuses."
       ],
@@ -713,9 +644,7 @@
       "phase": 5,
       "priority": "high",
       "status": "completed",
-      "dependencies": [
-        "F026"
-      ],
+      "dependencies": ["F026"],
       "acceptanceCriteria": [
         "User-visible frontend interaction tests cover calculator, thread CRUD, history, reuse and errors."
       ],
@@ -737,11 +666,7 @@
       "phase": 5,
       "priority": "high",
       "status": "not_started",
-      "dependencies": [
-        "F027",
-        "F028",
-        "F029"
-      ],
+      "dependencies": ["F027", "F028", "F029"],
       "acceptanceCriteria": [
         "All operations work through frontend proxy.",
         "Data survives container recreation without deleting named volumes."
@@ -758,9 +683,7 @@
       "phase": 5,
       "priority": "high",
       "status": "not_started",
-      "dependencies": [
-        "F030"
-      ],
+      "dependencies": ["F030"],
       "acceptanceCriteria": [
         "Go tests/vet, frontend tests/typecheck/lint/build pass.",
         "Mobile/desktop and keyboard accessibility are reviewed."
@@ -777,9 +700,7 @@
       "phase": 6,
       "priority": "high",
       "status": "not_started",
-      "dependencies": [
-        "F031"
-      ],
+      "dependencies": ["F031"],
       "acceptanceCriteria": [
         "README documents architecture, API examples, operations, numeric limitations and intentional authentication exclusion."
       ],
@@ -795,10 +716,7 @@
       "phase": 6,
       "priority": "high",
       "status": "not_started",
-      "dependencies": [
-        "F008",
-        "F032"
-      ],
+      "dependencies": ["F008", "F032"],
       "acceptanceCriteria": [
         "Docker-only startup/test workflow, environment variables, watcher behavior and volume preservation are documented."
       ],
@@ -814,9 +732,7 @@
       "phase": 6,
       "priority": "low",
       "status": "not_started",
-      "dependencies": [
-        "F031"
-      ],
+      "dependencies": ["F031"],
       "acceptanceCriteria": [
         "Runtime build targets exclude development tooling and route frontend API requests appropriately."
       ],
@@ -832,12 +748,7 @@
       "phase": 6,
       "priority": "high",
       "status": "not_started",
-      "dependencies": [
-        "F032",
-        "F033",
-        "F034",
-        "F036"
-      ],
+      "dependencies": ["F032", "F033", "F034", "F036", "F037"],
       "acceptanceCriteria": [
         "Full verification suite has recorded evidence.",
         "Feature statuses reflect actual verified state and limitations are reported."
@@ -854,9 +765,7 @@
       "phase": 5,
       "priority": "high",
       "status": "in_progress",
-      "dependencies": [
-        "F019"
-      ],
+      "dependencies": ["F019"],
       "acceptanceCriteria": [
         "Prettier config consistently formats JSON, TS/TSX, CSS, Markdown and YAML.",
         "A native Git pre-commit hook and lint-staged format staged supported files, including paths with spaces, while preserving partial staging.",
@@ -871,6 +780,33 @@
       "notes": [
         "Added from explicit user steering during frontend implementation; implement separately after current UI work.",
         "Use native Git core.hooksPath with lint-staged, per root decision; Husky is unnecessary for Docker-only execution."
+      ]
+    },
+    {
+      "id": "F037",
+      "title": "Fix live thread history endpoint and development rebuild regression",
+      "phase": 5,
+      "priority": "high",
+      "status": "completed",
+      "dependencies": ["F022", "F023", "F024"],
+      "acceptanceCriteria": [
+        "Creating a live thread loads empty history without endpoint errors.",
+        "Successful calculations appear in that thread history in the real browser.",
+        "The development API reloads nested source changes reliably, with regression verification."
+      ],
+      "verification": {
+        "checks": [
+          {
+            "command": "Docker Playwright STRESS_WATCHER=true node scripts/live-history-check.cjs; docker compose exec api process/executable inspection; go test -race ./...; frontend npm test -- --run",
+            "result": "passed:3rapidnestededitbursts eachservedlatestsource; emptyhistory200, realReactcalculationhistory/reload; singlecurrent(non-deleted)APIexecutable, noportbindingerrors; backendraceand26frontendtests green",
+            "executedAt": "2026-11-12T16:38:33.2599093Z"
+          }
+        ],
+        "blocker": null
+      },
+      "notes": [
+        "Added from explicit user bug report: new thread shows requested endpoint does not exist and history is absent.",
+        "Root cause: Air1.61.7 orphaned an older API during rapid concurrent rebuilds, so later binaries failed to bind8080 and stale routes remained active. PinnedAir1.67.4,1s debounce, unchanged filtering, module watching and12s graceful kill interval fix it. Userdata preserved."
       ]
     }
   ]
