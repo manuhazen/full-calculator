@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:40:04.9839131Z",
+  "updatedAt": "2026-11-12T15:41:44.2032556Z",
   "features": [
     {
       "id": "F001",
@@ -387,7 +387,7 @@
       "title": "Unified calculation endpoint",
       "phase": 3,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F012",
         "F015"
@@ -396,7 +396,13 @@
         "All seven operations use one POST /api/v1/calculations endpoint with decimal strings."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./...",
+            "result": "passed: single POST endpoint serves all seven operations with UUID/time/expression/string operands/results and atomic SQLite persistence; missing thread404 and per-operation endpoints absent",
+            "executedAt": "2026-11-12T15:41:44.2032556Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

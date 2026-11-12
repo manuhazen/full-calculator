@@ -34,6 +34,7 @@ func New(store *repository.Store, cfg config.Config, logger *slog.Logger) http.H
 	})
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/health", a.health)
+		r.Post("/calculations", a.calculate)
 		r.Get("/threads", a.threads)
 		r.Post("/threads", a.createThread)
 		r.Get("/threads/{id}", a.thread)
