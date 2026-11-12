@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:39:35.3409975Z",
+  "updatedAt": "2026-11-12T16:43:28.1896652Z",
   "features": [
     {
       "id": "F001",
@@ -665,14 +665,20 @@
       "title": "Docker-based integration and persistence checks",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": ["F027", "F028", "F029"],
       "acceptanceCriteria": [
         "All operations work through frontend proxy.",
         "Data survives container recreation without deleting named volumes."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "Docker Playwright scripts/workspace-check.cjs prepare; docker compose up -d --force-recreate --wait; CHECK_MODE=verify scripts/workspace-check.cjs",
+            "result": "passed:all7operations throughactualReact/unifiedAPI, create/rename/switch/history/reuse/keyboard, exactnames+orderedhistories survivedbothcontainerrecreation, confirmeddeletecascades/isolation; onlytestfixturesremoved,namedvolumespreserved",
+            "executedAt": "2026-11-12T16:43:28.1896652Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
