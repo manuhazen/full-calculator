@@ -50,6 +50,42 @@ func Evaluate(operation string, operands []string) (Result, error) {
 		value = a.DivRound(b, Places)
 		expression = binary(operands, "/")
 		nonzero = !a.IsZero()
+	case "sqrt":
+		if a.IsNegative() {
+			return Result{}, fault.New("NEGATIVE_SQUARE_ROOT", "Cannot calculate the square root of a negative number.")
+		}
+		var err error
+		value, err = a.SqrtRound(Places)
+		if err != nil {
+			return Result{}, fault.New("INVALID_OPERAND", "Cannot calculate this square root.")
+		}
+		expression = "sqrt(" + operands[0] + ")"
+		nonzero = !a.IsZero()
+	case "percent":
+		value = a.Shift(-2)
+		expression = operands[0] + " / 100"
+		nonzero = !a.IsZero()
+	case "power":
+		if !b.Equal(b.Truncate(0)) || b.LessThan(decimal.NewFromInt(-20)) || b.GreaterThan(decimal.NewFromInt(20)) {
+			return Result{}, fault.New("INVALID_EXPONENT", "Exponent must be an integer between -20 and 20.")
+		}
+		n := b.IntPart()
+		if a.IsZero() && n < 0 {
+			return Result{}, fault.New("ZERO_NEGATIVE_POWER", "Zero cannot be raised to a negative exponent.")
+		}
+		negative := n < 0
+		if negative {
+			n = -n
+		}
+		value = decimal.NewFromInt(1)
+		for i := int64(0); i < n; i++ {
+			value = value.Mul(a)
+		}
+		if negative {
+			value = decimal.NewFromInt(1).DivRound(value, Places)
+		}
+		expression = binary(operands, "^")
+		nonzero = !a.IsZero() || n == 0
 	default:
 		return Result{}, fault.New("INVALID_OPERATION", "Choose a supported calculation operation.")
 	}

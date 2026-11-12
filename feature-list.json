@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:39:18.1104326Z",
+  "updatedAt": "2026-11-12T15:40:04.9839131Z",
   "features": [
     {
       "id": "F001",
@@ -363,7 +363,7 @@
       "title": "Advanced arithmetic calculation engine",
       "phase": 3,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F014"
       ],
@@ -371,7 +371,13 @@
         "Power, sqrt, percent follow documented semantics and integer exponent bounds."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./internal/calculator",
+            "result": "passed: all advanced operations, exact positive powers, reciprocal negative powers, sqrt12-place rounding, percent, negative values, exponents[-20,20],0^0=1, overflow/underflow/domain errors",
+            "executedAt": "2026-11-12T15:40:04.9839131Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
