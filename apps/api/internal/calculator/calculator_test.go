@@ -2,9 +2,32 @@ package calculator
 
 import (
 	"calculator-workspace/api/internal/fault"
+	"calculator-workspace/api/internal/validation"
 	"errors"
 	"testing"
 )
+
+func TestResultBoundariesRemainReusable(t *testing.T) {
+	for _, tc := range []struct {
+		operation string
+		operands  []string
+		want      string
+	}{
+		{"add", []string{"999999999999999999999999.999999999999", "0"}, "999999999999999999999999.999999999999"},
+		{"add", []string{"0.000000000001", "0"}, "0.000000000001"},
+		{"subtract", []string{"0.000000000001", "0.000000000001"}, "0"},
+		{"multiply", []string{"0.000000000001", "0.5"}, "0.000000000001"},
+		{"multiply", []string{"-0.000000000001", "0.5"}, "-0.000000000001"},
+	} {
+		result, err := Evaluate(tc.operation, tc.operands)
+		if err != nil || result.Value != tc.want {
+			t.Fatalf("result=%+v,err=%v,want=%s", result, err, tc.want)
+		}
+		if err := validation.Decimal(result.Value); err != nil {
+			t.Fatalf("result cannot be reused: %s: %v", result.Value, err)
+		}
+	}
+}
 
 func TestBasicArithmetic(t *testing.T) {
 	for _, tc := range []struct {

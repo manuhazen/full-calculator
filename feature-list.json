@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:44:09.8687897Z",
+  "updatedAt": "2026-11-12T15:45:04.8737838Z",
   "features": [
     {
       "id": "F001",
@@ -608,7 +608,7 @@
       "title": "Backend calculation unit tests",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F014",
         "F015",
@@ -618,7 +618,13 @@
         "Table-driven engine tests cover all operations, zero/negative operands, rounding and numeric bounds."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test -cover ./internal/calculator",
+            "result": "passed: table-driven coverage of all7ops, negatives/zero, decimal/tie rounding, integer exponent range/domain errors, maximum/minimum reusable result bounds",
+            "executedAt": "2026-11-12T15:45:04.8737838Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
