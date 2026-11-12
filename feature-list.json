@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:45:20.0146496Z",
+  "updatedAt": "2026-11-12T16:51:51.0802352Z",
   "features": [
     {
       "id": "F001",
@@ -713,13 +713,19 @@
       "title": "README and API documentation",
       "phase": 6,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": ["F031"],
       "acceptanceCriteria": [
         "README documents architecture, API examples, operations, numeric limitations and intentional authentication exclusion."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "Docker Node API-example check through Vite; Docker Prettier README.md; source/API contract review",
+            "result": "passed: all7documented operation results, threadcreate/rename/history/delete and422errorenvelope verified through realfrontendproxy; verificationthreadcleaned; READMEformatted andsetup/run/API/design/numeric/security/test/hook/productionsections reviewed",
+            "executedAt": "2026-11-12T16:51:51.0802352Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
@@ -745,7 +751,7 @@
       "title": "Optional production-oriented container builds",
       "phase": 6,
       "priority": "low",
-      "status": "not_started",
+      "status": "in_progress",
       "dependencies": ["F031"],
       "acceptanceCriteria": [
         "Runtime build targets exclude development tooling and route frontend API requests appropriately."
