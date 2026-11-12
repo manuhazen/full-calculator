@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:37:40.6659509Z",
+  "updatedAt": "2026-11-12T15:39:18.1104326Z",
   "features": [
     {
       "id": "F001",
@@ -338,7 +338,7 @@
       "title": "Basic arithmetic calculation engine",
       "phase": 3,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F008",
         "F013"
@@ -347,7 +347,13 @@
         "Add/subtract/multiply/divide use decimal arithmetic independently of HTTP and database."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./internal/calculator",
+            "result": "passed: all basic operations, exact decimal arithmetic, negative/zero operands, 12-place positive/negative rounding ties, divide-zero, underflow, overflow, operand validation",
+            "executedAt": "2026-11-12T15:39:18.1104326Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
