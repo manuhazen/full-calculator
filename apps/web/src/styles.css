@@ -117,6 +117,17 @@ svg { flex-shrink: 0; }
 .history-result-row time { font-size: 10px; color: #87917d; white-space: nowrap; }
 .history-feedback { padding: 22px 0; color: #767e6c; font-size: 13px; line-height: 1.6; }
 .history-feedback p { margin: 0 0 12px; }
+.reuse-result { width: 36px; min-width: 36px; height: 36px; color: #6a775f; }
+.reuse-result:hover { color: #284f3b; }
+.keyboard-help { display: flex; justify-content: center; margin-top: 16px; }
+.keyboard-help button { font-size: 11px; color: #69745f; gap: 7px; }
+.keyboard-help button svg { width: 14px; height: 14px; }
+.shortcut-list { margin: 26px 0 0; }
+.shortcut-list > div { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 10px 0; font-size: 12px; color: #65705b; }
+.shortcut-list dt { flex: 1; }
+.shortcut-list dd { margin: 0; white-space: nowrap; }
+kbd { display: inline-block; padding: 3px 6px; border: 1px solid #dce2d4; border-radius: 4px; background: #f6f7f2; font: inherit; font-size: 10px; color: #56644b; }
+@media (max-width: 767px) { .reuse-result { width: 44px; min-width: 44px; height: 44px; } .keyboard-help button { min-height: 44px; } }
 @media (max-width: 1199px) { .history-list { max-height: 440px; } .history-empty { padding-block: 45px; } }
 @media (max-width: 1199px) { .workspace-grid { grid-template-columns: minmax(0,1fr); row-gap: 44px; } }
 @media (max-width: 767px) { .workspace-heading { margin-bottom: 25px; gap: 8px; } .workspace-heading p { max-width: 220px; } .workspace-actions { gap: 0; } .thread-row-actions { opacity: 1; top: 2px; } .thread-row-actions button { width: 40px; height: 44px; } .thread-select { padding-right: 90px; } .calculator { max-width: none; } .calc-key { height: 62px; } }

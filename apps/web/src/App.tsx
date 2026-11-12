@@ -6,6 +6,8 @@ import { ThreadNavigation } from './components/thread-navigation'
 import { DeleteThreadDialog, RenameThreadDialog } from './components/thread-dialogs'
 import { Calculator } from './components/calculator'
 import { CalculationHistory } from './components/calculation-history'
+import { KeyboardHelp } from './components/keyboard-help'
+import { useCalculatorKeyboard } from './hooks/use-calculator-keyboard'
 import { Button } from './components/ui/button'
 import { api, type Calculation, type Thread } from './lib/api'
 import { historyOptions, keys, threadOptions } from './lib/queries'
@@ -27,6 +29,7 @@ export default function App() {
   const [deleteTarget, setDeleteTarget] = useState<Thread | null>(null)
   const [threadError, setThreadError] = useState('')
   const calculating = useRef(false)
+  const focusOnSelection = useRef(false)
   const creating = useRef(false)
   const create = useMutation({ mutationFn: api.createThread })
   const rename = useMutation({ mutationFn: ({ id, name }: { id: string; name: string }) => api.renameThread(id, name) })
@@ -37,6 +40,7 @@ export default function App() {
   useEffect(() => {
     try { if (selected) localStorage.setItem(selectionKey, selected.id); else if (!threads.isPending) localStorage.removeItem(selectionKey) } catch { /* Selection remains usable without local storage. */ }
   }, [selected, threads.isPending])
+  useEffect(() => { if (selected && focusOnSelection.current) { document.getElementById('calculator-display')?.focus(); focusOnSelection.current = false } }, [selected])
 
   const updateDraft = useCallback((id: string, action: DraftAction) => {
     setDrafts(current => ({ ...current, [id]: draftReducer(current[id] ?? emptyDraft(), action) }))
@@ -49,7 +53,7 @@ export default function App() {
       const item = await create.mutateAsync()
       await client.cancelQueries({ queryKey: keys.threads })
       client.setQueryData<Thread[]>(keys.threads, current => [item, ...(current ?? [])])
-      setPreferredId(item.id)
+      focusOnSelection.current = true; setPreferredId(item.id)
       void client.invalidateQueries({ queryKey: keys.threads })
     } catch (error) { setThreadError(message(error)) } finally { creating.current = false }
   }
@@ -97,13 +101,15 @@ export default function App() {
   }
   function equals() { const input = submission(draft); if (input) void runCalculation(input) }
   function unary(operation: 'sqrt' | 'percent') { if (!draft.operation) void runCalculation({ operation, operands: [operand(draft.entry)] }) }
+  function reuse(value: string) { edit({ type: 'load', value }); document.getElementById('calculator-display')?.focus() }
+  useCalculatorKeyboard({ enabled: Boolean(selected) && !calculate.isPending, onEdit: edit, onOperation: chooseOperation, onCalculate: equals, onUnary: unary })
 
-  return <WorkspaceLayout navigation={close => <ThreadNavigation threads={threads.data ?? []} selectedId={selected?.id ?? null} creating={create.isPending} loading={threads.isPending} pendingThread={pendingThread} onCreate={() => { void newThread(); close() }} onSelect={id => { setPreferredId(id); setThreadError(''); close() }} onRename={setRenameTarget} onDelete={setDeleteTarget} />}>
+  return <WorkspaceLayout navigation={close => <ThreadNavigation threads={threads.data ?? []} selectedId={selected?.id ?? null} creating={create.isPending} loading={threads.isPending} pendingThread={pendingThread} onCreate={() => { void newThread(); close() }} onSelect={id => { focusOnSelection.current = true; setPreferredId(id); setThreadError(''); close(); if (selected?.id === id) document.getElementById('calculator-display')?.focus() }} onRename={setRenameTarget} onDelete={setDeleteTarget} />}>
     <main id="workspace" className="workspace-body">
       {threadError && <div className="error-banner" role="alert"><AlertCircle size={18} /><span>{threadError}</span></div>}
       {threads.isPending ? <div className="workspace-empty" role="status"><LoaderCircle className="animate-spin" /><p>Opening your workspace…</p></div> : threads.isError ? <div className="workspace-empty"><AlertCircle size={30} /><h1>Couldn’t load your threads</h1><p>{message(threads.error)}</p><Button onClick={() => void threads.refetch()}>Try again</Button></div> : !selected ? <div className="workspace-empty"><CalculatorIcon size={34} strokeWidth={1.4} /><h1>A fresh start for your numbers</h1><p>Create a thread to collect related calculations. Pick it up again whenever you need.</p><Button onClick={() => void newThread()} disabled={create.isPending}>{create.isPending ? <LoaderCircle className="animate-spin" /> : <Plus />}Create a thread</Button></div> : <>
         <header className="workspace-heading"><div><h1>{selected.name}</h1><p>A little space to work things out.</p></div><div className="workspace-actions"><Button variant="ghost" size="icon" aria-label="Rename thread" title="Rename thread" onClick={() => setRenameTarget(selected)}><Pencil /></Button><Button variant="ghost" size="icon" aria-label="Delete thread" title="Delete thread" disabled={pendingThread === selected.id} onClick={() => setDeleteTarget(selected)}><Trash2 /></Button></div></header>
-        <div className="workspace-grid"><div className="calculator-column"><Calculator draft={draft} busy={calculate.isPending} onEdit={edit} onOperation={chooseOperation} onCalculate={equals} onUnary={unary} />{draft.error && <div className="error-banner calculation-error" role="alert"><AlertCircle size={18} /><span>{draft.error}</span></div>}</div><CalculationHistory key={selected.id} items={history.data ?? []} loading={history.isPending} error={history.isError ? message(history.error) : null} onRetry={() => void history.refetch()} /></div>
+        <div className="workspace-grid"><div className="calculator-column"><Calculator draft={draft} busy={calculate.isPending} onEdit={edit} onOperation={chooseOperation} onCalculate={equals} onUnary={unary} />{draft.error && <div className="error-banner calculation-error" role="alert"><AlertCircle size={18} /><span>{draft.error}</span></div>}<KeyboardHelp /></div><CalculationHistory key={selected.id} items={history.data ?? []} loading={history.isPending} error={history.isError ? message(history.error) : null} onRetry={() => void history.refetch()} onReuse={reuse} busy={calculate.isPending} /></div>
       </>}
     </main>
     {renameTarget && <RenameThreadDialog key={renameTarget.id} thread={renameTarget} busy={rename.isPending} onClose={() => setRenameTarget(null)} onSave={renameThread} />}

@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:13:48.4389256Z",
+  "updatedAt": "2026-11-12T16:18:14.9418201Z",
   "features": [
     {
       "id": "F001",
@@ -610,7 +610,7 @@
       "title": "Result reuse and keyboard interactions",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F024"
       ],
@@ -618,7 +618,13 @@
         "History results can be reused and keyboard controls work without intercepting dialogs/text fields."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run",
+            "result": "passed:15tests including scopedkeyboard25+15Enter, reusewithoutrequest, nativeEnteroutsidekeypad, renameformtyping, focusmanagement and keyboardhelp; shortcutsignoreforms/dialogs/contenteditable/browsermodifiers",
+            "executedAt": "2026-11-12T16:18:14.9418201Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
