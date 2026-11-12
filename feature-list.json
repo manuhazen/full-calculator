@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:43:28.1896652Z",
+  "updatedAt": "2026-11-12T16:45:20.0146496Z",
   "features": [
     {
       "id": "F001",
@@ -688,17 +688,25 @@
       "title": "Accessibility, responsive, lint, type-check, and build verification",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": ["F030"],
       "acceptanceCriteria": [
         "Go tests/vet, frontend tests/typecheck/lint/build pass.",
         "Mobile/desktop and keyboard accessibility are reviewed."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "Docker Playwright+axe scripts/accessibility-check.cjs; go test -race ./...; go vet ./...; frontend tests/typecheck/lint/build",
+            "result": "passed:4responsivewidths1440/768/390/320 includingmaximumprecisiondisplay,0axeWCAGA/AAviolations, mobileDrawerEscape/focusrestore, desktop/mobilevisualinspection, backendrace/vet,26frontendtests,typecheck,0-warninglint,productionbundlebuild",
+            "executedAt": "2026-11-12T16:45:20.0146496Z"
+          }
+        ],
         "blocker": null
       },
-      "notes": []
+      "notes": [
+        "Vite production build exits0; Rollup removes two nonfunctional third-partyZod purity-comment annotations."
+      ]
     },
     {
       "id": "F032",
