@@ -17,6 +17,63 @@ beforeEach(() => { vi.restoreAllMocks(); localStorage.clear() })
 function deferred<T>() { let resolve!: (value: T) => void; const promise = new Promise<T>(done => { resolve = done }); return { promise, resolve } }
 
 describe('thread workspace', () => {
+  it('sends power, square root and percentage through the same backend client', async () => {
+    const { calculate, histories } = mockApi([threadFixture('first', 'Budget')])
+    const answers = { power: ['400', '20 ^ 2'], sqrt: ['20', 'sqrt(400)'], percent: ['0.2', '20 / 100'] }
+    calculate.mockImplementation(async (threadId, input) => {
+      const [result, expression] = answers[input.operation as keyof typeof answers]
+      const item: Calculation = { ...input, id: input.operation, threadId, result, expression, createdAt: '2026-11-12T12:00:00Z' }
+      histories[threadId] = [...(histories[threadId] ?? []), item]; return item
+    })
+    const user = userEvent.setup(); renderWorkspace(); await screen.findByRole('heading', { name: 'Budget' })
+    await user.keyboard('20^2{Enter}')
+    await waitFor(() => expect(screen.getByLabelText('Calculator display')).toHaveTextContent('400'))
+    await user.click(screen.getByRole('button', { name: 'Square root' }))
+    await waitFor(() => expect(screen.getByLabelText('Calculator display')).toHaveTextContent('20'))
+    await user.click(screen.getByRole('button', { name: 'Percentage' }))
+    await waitFor(() => expect(screen.getByLabelText('Calculator display')).toHaveTextContent('0.2'))
+    expect(calculate).toHaveBeenNthCalledWith(1, 'first', { operation: 'power', operands: ['20', '2'] })
+    expect(calculate).toHaveBeenNthCalledWith(2, 'first', { operation: 'sqrt', operands: ['400'] })
+    expect(calculate).toHaveBeenNthCalledWith(3, 'first', { operation: 'percent', operands: ['20'] })
+  })
+
+  it('chains left to right using each completed server result', async () => {
+    const { calculate, histories } = mockApi([threadFixture('first', 'Budget')])
+    const replies = [{ result: '5', expression: '2 + 3' }, { result: '20', expression: '5 * 4' }]
+    calculate.mockImplementation(async (threadId, input) => {
+      const reply = replies.shift(); if (!reply) throw new Error('Unexpected calculation')
+      const item: Calculation = { ...input, ...reply, id: input.operation, threadId, createdAt: '2026-11-12T12:00:00Z' }
+      histories[threadId] = [...(histories[threadId] ?? []), item]; return item
+    })
+    const user = userEvent.setup(); renderWorkspace(); await screen.findByRole('heading', { name: 'Budget' })
+    await user.keyboard('2+3*')
+    await screen.findByText('5 ×')
+    await user.keyboard('4{Enter}')
+    await waitFor(() => expect(screen.getByLabelText('Calculator display')).toHaveTextContent('20'))
+    expect(calculate).toHaveBeenNthCalledWith(1, 'first', { operation: 'add', operands: ['2', '3'] })
+    expect(calculate).toHaveBeenNthCalledWith(2, 'first', { operation: 'multiply', operands: ['5', '4'] })
+  })
+
+  it('counts Unicode codepoints when validating thread names', async () => {
+    mockApi([threadFixture('first', 'Budget')]); const user = userEvent.setup(); renderWorkspace(); await screen.findByRole('heading', { name: 'Budget' })
+    await user.click(screen.getByRole('button', { name: 'Rename thread' }))
+    const input = screen.getByLabelText('Thread name')
+    await user.clear(input); await user.paste('🧮'.repeat(81)); await user.click(screen.getByRole('button', { name: 'Save name' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Use at most 80 characters.')
+    await user.clear(input); await user.paste('🧮'.repeat(80)); await user.click(screen.getByRole('button', { name: 'Save name' }))
+    await screen.findByRole('heading', { name: '🧮'.repeat(80) })
+    expect(api.renameThread).toHaveBeenCalledWith('first', '🧮'.repeat(80))
+  })
+
+  it('supports keyboard backspace and clear while leaving browser modifier shortcuts alone', async () => {
+    mockApi([threadFixture('first', 'Budget')]); const user = userEvent.setup(); renderWorkspace(); await screen.findByRole('heading', { name: 'Budget' })
+    await user.keyboard('123{Backspace}')
+    expect(screen.getByLabelText('Calculator display')).toHaveTextContent('12')
+    await user.keyboard('{Control>}7{/Control}')
+    expect(screen.getByLabelText('Calculator display')).toHaveTextContent('12')
+    await user.keyboard('{Escape}')
+    expect(screen.getByLabelText('Calculator display')).toHaveTextContent('0')
+  })
   it('changes a returned result sign before chaining another server calculation', async () => {
     const { calculate, histories } = mockApi([threadFixture('first', 'Budget')])
     calculate.mockImplementationOnce(async (threadId, input) => { const item: Calculation = { ...input, id: 'sum-ten', threadId, result: '10', expression: '5 + 5', createdAt: '2026-11-12T12:00:00Z' }; histories[threadId] = [item]; return item })

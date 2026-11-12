@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:28:00.2695408Z",
+  "updatedAt": "2026-11-12T16:29:56.9786801Z",
   "features": [
     {
       "id": "F001",
@@ -712,7 +712,7 @@
       "title": "Frontend component and interaction tests",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F026"
       ],
@@ -720,7 +720,13 @@
         "User-visible frontend interaction tests cover calculator, thread CRUD, history, reuse and errors."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run; npm run build",
+            "result": "passed:26tests across6files cover numericinput/operations/serverresult, advancedops/lefttorightchaining, CRUD+80Unicodecodepointnames, isolation/history/reuse, keyboard/nativecontrols/formscope, loading/errorretry/duplicateEnter/lateresponses, reviewedresultsignregression; types/lint/build",
+            "executedAt": "2026-11-12T16:29:56.9786801Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
