@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:34:36.8671611Z",
+  "updatedAt": "2026-11-12T15:37:40.6659509Z",
   "features": [
     {
       "id": "F001",
@@ -289,7 +289,7 @@
       "title": "Thread management API",
       "phase": 2,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F011",
         "F013"
@@ -298,7 +298,13 @@
         "Thread list/create/get/rename/delete endpoints return correct status codes and cascade history deletion."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./...; go test ./internal/handlers",
+            "result": "passed: Chi thread CRUD/default-name/rename/isolation/cascade, statuses, consistent envelopes, invalid JSON/UUID/unknown/trailing/oversize/missing/name validation",
+            "executedAt": "2026-11-12T15:37:40.6659509Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

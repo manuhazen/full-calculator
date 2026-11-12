@@ -2,9 +2,9 @@ package main
 
 import (
 	"calculator-workspace/api/internal/config"
+	"calculator-workspace/api/internal/handlers"
 	"calculator-workspace/api/internal/repository"
 	"context"
-	"encoding/json"
 	"log/slog"
 	"net/http"
 	"os"
@@ -26,16 +26,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Close()
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /api/v1/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if err := db.PingContext(r.Context()); err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			json.NewEncoder(w).Encode(map[string]any{"error": map[string]string{"code": "NOT_READY", "message": "The service is not ready."}})
-			return
-		}
-		json.NewEncoder(w).Encode(map[string]string{"status": "ok", "message": "API is ready"})
-	})
+	mux := handlers.New(repository.New(db), cfg, logger)
 	server := &http.Server{Addr: cfg.Address, Handler: mux, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
