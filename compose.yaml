@@ -1,0 +1,57 @@
+name: calculator-workspace
+services:
+  api:
+    build:
+      context: ./apps/api
+      target: development
+    init: true
+    environment:
+      API_ADDR: ${API_ADDR:-:8080}
+      DATABASE_PATH: ${DATABASE_PATH:-/data/calculator.db}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+    ports:
+      - "127.0.0.1:${API_PORT:-8080}:8080"
+    volumes:
+      - ./apps/api:/app
+      - sqlite_data:/data
+      - go_modules:/go/pkg/mod
+      - go_build:/home/app/.cache/go-build
+    networks: [workspace]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/v1/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
+  web:
+    build:
+      context: ./apps/web
+      target: development
+    init: true
+    environment:
+      API_PROXY_TARGET: ${API_PROXY_TARGET:-http://api:8080}
+      WATCH_POLLING: ${WATCH_POLLING:-true}
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5173}:5173"
+    volumes:
+      - ./apps/web:/app
+      - web_dependencies:/app/node_modules
+    command: sh -c "npm ci --no-audit --no-fund && npm run dev"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [workspace]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:5173/api/v1/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
+networks:
+  workspace:
+    driver: bridge
+volumes:
+  sqlite_data:
+  go_modules:
+  go_build:
+  web_dependencies:
