@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:01:20.1065906Z",
+  "updatedAt": "2026-11-12T16:01:23.0695117Z",
   "features": [
     {
       "id": "F001",
@@ -797,7 +797,8 @@
       "dependencies": [
         "F032",
         "F033",
-        "F034"
+        "F034",
+        "F036"
       ],
       "acceptanceCriteria": [
         "Full verification suite has recorded evidence.",
@@ -808,6 +809,30 @@
         "blocker": null
       },
       "notes": []
+    },
+    {
+      "id": "F036",
+      "title": "Consistent formatting and Prettier pre-commit hook",
+      "phase": 5,
+      "priority": "high",
+      "status": "not_started",
+      "dependencies": [
+        "F019"
+      ],
+      "acceptanceCriteria": [
+        "Prettier config consistently formats JSON, TS/TSX, CSS, Markdown and YAML.",
+        "Husky and lint-staged format staged files, including paths with spaces.",
+        "The Docker-first hook workflow requires no host Node and uses docker compose exec -T web where needed.",
+        "Go formatting remains gofmt and Go files are excluded from Prettier.",
+        "Format check and an actual staged pre-commit hook exercise pass."
+      ],
+      "verification": {
+        "checks": [],
+        "blocker": null
+      },
+      "notes": [
+        "Added from explicit user steering during frontend implementation; implement separately after current UI work."
+      ]
     }
   ]
 }
