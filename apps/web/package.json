@@ -10,7 +10,9 @@
     "test": "vitest",
     "lint": "eslint . --max-warnings 0"
   },
-  "overrides": { "minimatch": "^11.0.1" },
+  "overrides": {
+    "minimatch": "^11.0.1"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.9.2",
     "@radix-ui/react-alert-dialog": "^1.2.1",

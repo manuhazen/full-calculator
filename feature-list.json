@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:38:33.2599093Z",
+  "updatedAt": "2026-11-12T16:39:35.3409975Z",
   "features": [
     {
       "id": "F001",
@@ -764,7 +764,7 @@
       "title": "Consistent formatting and Prettier pre-commit hook",
       "phase": 5,
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": ["F019"],
       "acceptanceCriteria": [
         "Prettier config consistently formats JSON, TS/TSX, CSS, Markdown and YAML.",
@@ -774,12 +774,19 @@
         "Format check and an actual staged pre-commit hook exercise pass."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "Docker formatter npm run format and format:check; tools/format/verify-hook.ps1 actualGitfixture; git config core.hooksPath .githooks",
+            "result": "passed: repo-widePrettier check, Docker-only actualstagedhook pathwithspaces andpartialstagepreservation, nativehook enabled, Go excluded and formattedwithgofmt",
+            "executedAt": "2026-11-12T16:39:35.3409975Z"
+          }
+        ],
         "blocker": null
       },
       "notes": [
         "Added from explicit user steering during frontend implementation; implement separately after current UI work.",
-        "Use native Git core.hooksPath with lint-staged, per root decision; Husky is unnecessary for Docker-only execution."
+        "Use native Git core.hooksPath with lint-staged, per root decision; Husky is unnecessary for Docker-only execution.",
+        "Native Git hook replaces unnecessary Husky per root decision. All formatter dependencies live in cached Docker image; LF Git attributes keep scripts portable. No host Node.js required."
       ]
     },
     {

@@ -5,6 +5,7 @@
 - Read `feature-list.json` first when starting or resuming work. Preserve stable IDs and unfinished work; inspect existing code before changing it.
 - The tracker is the single source of truth. Choose an eligible feature, verify dependencies, set `in_progress`, implement, run acceptance checks, record evidence and update UTC `updatedAt`. Mark `completed` only after acceptance criteria pass. Record blockers precisely.
 - Docker is the default development and testing environment. Developers need only Docker and Docker Compose.
+- Use Prettier for supported frontend, JSON, CSS, Markdown, and YAML files, and gofmt for Go files. F036 tracks repository formatting and a pre-commit hook that runs Prettier on staged supported files. Keep the hook compatible with the Docker-only development workflow and never skip it to hide formatting failures.
 - F008 is a mandatory Docker verification gate. Until build, startup, direct/proxied health, frontend HMR, backend rebuild, logs and restart checks pass, implement only minimum application bootstraps. Never skip this gate or develop business logic behind an unresolved blocker.
 - Never report checks that did not run as passing. Preserve failed/unavailable checks and limitations in the tracker and documentation.
 - Keep arithmetic independent of HTTP/storage. Every mathematical operation runs on the Go backend through the unified calculation endpoint; never add a browser arithmetic engine.

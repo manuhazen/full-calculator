@@ -1,0 +1,15 @@
+{
+  "name": "calculator-workspace-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:staged": "lint-staged",
+    "hooks:install": "git config core.hooksPath .githooks"
+  },
+  "devDependencies": {
+    "lint-staged": "16.2.6",
+    "prettier": "3.7.4"
+  }
+}

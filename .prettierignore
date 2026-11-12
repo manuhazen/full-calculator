@@ -1,0 +1,13 @@
+.git
+**/node_modules
+**/dist
+**/coverage
+**/tmp
+**/test-results
+**/playwright-report
+**/*.tsbuildinfo
+**/*.go
+**/go.mod
+**/go.sum
+**/*.sql
+**/*.toml
