@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:01:23.0695117Z",
+  "updatedAt": "2026-11-12T16:04:43.7781966Z",
   "features": [
     {
       "id": "F001",
@@ -536,7 +536,7 @@
       "title": "Backend API client and TanStack Query integration",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F020",
         "F018"
@@ -545,7 +545,13 @@
         "Typed API client and TanStack Query centralize requests, mutations and cache updates."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run; npm run build",
+            "result": "passed: 9tests including unified relative API path and originaldecimalstrings, bodylessdelete, queryabortsignal, machine-readable/server/networkerrors; QueryClient disablesmutationretries; types/lint/build",
+            "executedAt": "2026-11-12T16:04:43.7781966Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
@@ -815,14 +821,14 @@
       "title": "Consistent formatting and Prettier pre-commit hook",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "in_progress",
       "dependencies": [
         "F019"
       ],
       "acceptanceCriteria": [
         "Prettier config consistently formats JSON, TS/TSX, CSS, Markdown and YAML.",
-        "Husky and lint-staged format staged files, including paths with spaces.",
-        "The Docker-first hook workflow requires no host Node and uses docker compose exec -T web where needed.",
+        "A native Git pre-commit hook and lint-staged format staged supported files, including paths with spaces, while preserving partial staging.",
+        "The Docker-only formatter and hook require no host Node.js or Go.",
         "Go formatting remains gofmt and Go files are excluded from Prettier.",
         "Format check and an actual staged pre-commit hook exercise pass."
       ],
@@ -831,7 +837,8 @@
         "blocker": null
       },
       "notes": [
-        "Added from explicit user steering during frontend implementation; implement separately after current UI work."
+        "Added from explicit user steering during frontend implementation; implement separately after current UI work.",
+        "Use native Git core.hooksPath with lint-staged, per root decision; Husky is unnecessary for Docker-only execution."
       ]
     }
   ]
