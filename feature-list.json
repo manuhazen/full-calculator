@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:32:07.4866416Z",
+  "updatedAt": "2026-11-12T15:33:21.4423773Z",
   "features": [
     {
       "id": "F001",
@@ -265,7 +265,7 @@
       "title": "Thread models and repository",
       "phase": 2,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F010"
       ],
@@ -273,7 +273,13 @@
         "Thread repository persists names and timestamps using parameterized SQL."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./internal/repository",
+            "result": "passed: thread create/list/get/rename/delete, UUID generation, empty arrays, missing resources and parameterized untrusted name storage",
+            "executedAt": "2026-11-12T15:33:21.4423773Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
