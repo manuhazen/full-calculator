@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:24:56.7900307Z",
+  "updatedAt": "2026-11-12T14:49:01.7108870Z",
   "features": [
     {
       "id": "F001",
@@ -128,7 +128,7 @@
       "title": "Development hot reload for both services",
       "phase": 1,
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         "F005"
       ],
@@ -137,10 +137,19 @@
         "Host Go edit is rebuilt automatically and response changes."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "Docker Playwright 1.56.1 node scripts/docker-gate.cjs",
+            "result": "passed: actual React rendering, proxied health, source edit/restoration HMR with preserved window token, Go source edit/restoration rebuilt and health response changed",
+            "executedAt": "2026-11-12T14:49:01.7036396Z"
+          }
+        ],
         "blocker": null
       },
-      "notes": []
+      "notes": [
+        "Native browser host unavailable; verified using Chromium inside Docker instead.",
+        "Initial entry-module edit caused full reload; split App into exported component. Cleared stale Vite refresh-runtime module graph with one restart, then full browser gate passed."
+      ]
     },
     {
       "id": "F007",
