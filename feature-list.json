@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:33:21.4423773Z",
+  "updatedAt": "2026-11-12T15:34:36.8671611Z",
   "features": [
     {
       "id": "F001",
@@ -308,7 +308,7 @@
       "title": "Centralized request validation",
       "phase": 2,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F009"
       ],
@@ -316,7 +316,13 @@
         "Strict JSON limits, unknown/trailing field rejection, canonical UUIDs and trimmed thread names are enforced."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./internal/validation",
+            "result": "passed: strict JSON objects, unknown/trailing/type rejection, 8KiB limit, content types, canonical UUIDs, trimmed unicode names, strict decimal strings and operation/count allowlist",
+            "executedAt": "2026-11-12T15:34:36.8671611Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
