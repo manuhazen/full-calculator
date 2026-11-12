@@ -1,0 +1,45 @@
+name: calculator-workspace
+services:
+  api:
+    build:
+      context: ./apps/api
+      target: production
+    init: true
+    environment:
+      API_ADDR: ${API_ADDR:-:8080}
+      DATABASE_PATH: ${DATABASE_PATH:-/data/calculator.db}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      ENABLE_CORS: ${ENABLE_CORS:-false}
+    ports:
+      - '127.0.0.1:${API_PORT:-8080}:8080'
+    volumes:
+      - sqlite_data:/data
+    networks: [workspace]
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:8080/api/v1/health']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+  web:
+    build:
+      context: ./apps/web
+      target: production
+    init: true
+    ports:
+      - '127.0.0.1:${WEB_PORT:-5173}:8080'
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [workspace]
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:8080/api/v1/health']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+networks:
+  workspace:
+    driver: bridge
+volumes:
+  sqlite_data:

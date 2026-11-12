@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:54:37.0964120Z",
+  "updatedAt": "2026-11-12T16:55:49.6229696Z",
   "features": [
     {
       "id": "F001",
@@ -745,7 +745,7 @@
           {
             "command": "docker compose config --format json with defaults and ENABLE_CORS=true; Docker Prettier README/Compose; documented config/source review",
             "result": "passed:ENABLE_CORSfalse/defaultandtrueoverrideforwarded, APIinternal8080contractpreserved, workflow/env/volume/HMR/troubleshootingdocumented, formatterlinkvalid; nonrootdependencymaintenance anddata-preservingconfiguration-switchcommandsincluded",
-            "executedAt": "2026-11-12T16:54:37.0964120Z"
+            "executedAt": "2026-11-12T16:54:37.096412Z"
           }
         ],
         "blocker": null
@@ -757,13 +757,19 @@
       "title": "Optional production-oriented container builds",
       "phase": 6,
       "priority": "low",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": ["F031"],
       "acceptanceCriteria": [
         "Runtime build targets exclude development tooling and route frontend API requests appropriately."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose -f compose.production.yaml build; up -d --wait; Docker Chromium live-history-check with APP_URL=http://web:8080; nonroot/tool absence checks; docker compose up -d --build --wait",
+            "result": "passed: lightweight Go/staticNginx targets build/starthealthy; realstaticReactcalculatesandrenderspersistenthistorythroughNginx; APIUID10001/NginxUID101 withoutGo/Air/Node/npm; sameSQLitevolume preserved; developmentrestoredhealthy",
+            "executedAt": "2026-11-12T16:55:49.6229696Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
