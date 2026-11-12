@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:42:49.1250770Z",
+  "updatedAt": "2026-11-12T15:44:09.8687897Z",
   "features": [
     {
       "id": "F001",
@@ -425,7 +425,7 @@
           {
             "command": "docker compose exec api go test ./internal/repository ./internal/handlers",
             "result": "passed: persistent chronological history, thread isolation, cascade, original strings, result reuse through unified API, names/history survived database close/reopen",
-            "executedAt": "2026-11-12T15:42:49.1250770Z"
+            "executedAt": "2026-11-12T15:42:49.125077Z"
           }
         ],
         "blocker": null
@@ -437,7 +437,7 @@
       "title": "Error handling and numerical edge cases",
       "phase": 3,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F017"
       ],
@@ -445,7 +445,13 @@
         "Stable error envelopes cover domain errors, invalid operands, bounds, rounding and malformed requests."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./...; docker compose exec api go vet ./...",
+            "result": "passed: all numerical/domain errors and error statuses, rejected calculation nonpersistence, malicious formats/types, UTF8, body/content limits, internal error redaction and configured-origin CORS",
+            "executedAt": "2026-11-12T15:44:09.8687897Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

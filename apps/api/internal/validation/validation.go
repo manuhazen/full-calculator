@@ -32,6 +32,9 @@ func Decode(w http.ResponseWriter, r *http.Request, destination any) error {
 		}
 		return fault.New("INVALID_JSON", "Cannot read the JSON request.")
 	}
+	if !utf8.Valid(body) {
+		return fault.New("INVALID_JSON", "JSON must use valid UTF-8 encoding.")
+	}
 	trimmed := bytes.TrimSpace(body)
 	if len(trimmed) == 0 || trimmed[0] != '{' {
 		return fault.New("INVALID_JSON", "Request must be a JSON object.")
