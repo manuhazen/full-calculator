@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T16:18:14.9418201Z",
+  "updatedAt": "2026-11-12T16:28:00.2695408Z",
   "features": [
     {
       "id": "F001",
@@ -634,7 +634,7 @@
       "title": "Loading, empty, validation, and error states",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F025"
       ],
@@ -642,10 +642,18 @@
         "Loading, empty, validation and network error states preserve input and prevent duplicate submission."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run; npm run build",
+            "result": "passed:22tests covering loading, offlinequeryretry, preservedoperands/domainerrorretry, faileddelete, synchronousduplicateEnterguard, protectedinflightthread, lateoriginresponse; reviewed result-sign bug RED→GREEN, focus/disabled/dialogstates and contrast/touchrefinements",
+            "executedAt": "2026-11-12T16:28:00.2695408Z"
+          }
+        ],
         "blocker": null
       },
-      "notes": []
+      "notes": [
+        "Independentreview found ChangeSign resetting returnedresults tozero; fixedstringeditingpolicy andaddedreducer+user-visiblechainingregressions."
+      ]
     },
     {
       "id": "F027",

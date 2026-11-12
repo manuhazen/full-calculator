@@ -2,6 +2,14 @@ import { describe, expect, it } from 'vitest'
 import { draftReducer as reduce, emptyDraft, submission } from './calculator-state'
 
 describe('calculator input strings', () => {
+  it('changes the sign of a returned result and preserves it when chaining', () => {
+    const result = reduce(emptyDraft(), { type: 'success', value: '10', expression: '5 + 5' })
+    const negative = reduce(result, { type: 'sign' })
+    expect(negative.entry).toBe('-10')
+    expect(reduce(negative, { type: 'sign' }).entry).toBe('10')
+    const pending = reduce(negative, { type: 'operator', operation: 'multiply' })
+    expect(submission(reduce(pending, { type: 'digit', value: '2' }))).toEqual({ operation: 'multiply', operands: ['-10', '2'] })
+  })
   it('edits decimals, sign and backspace without doing arithmetic', () => {
     let state = reduce(emptyDraft(), { type: 'digit', value: '1' })
     state = reduce(state, { type: 'decimal' }); state = reduce(state, { type: 'digit', value: '5' })

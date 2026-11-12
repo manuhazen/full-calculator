@@ -2,20 +2,20 @@ import { Delete, Equal, LoaderCircle } from 'lucide-react'
 import { type BinaryOperation, type Draft, type DraftAction, operand, operationSymbols, submission } from '../lib/calculator-state'
 
 type Props = {
-  draft: Draft; busy?: boolean; disabled?: boolean
+  draft: Draft; busy?: boolean; disabled?: boolean; busyMessage?: string
   onEdit: (action: DraftAction) => void
   onOperation: (operation: BinaryOperation) => void
   onCalculate: () => void
   onUnary: (operation: 'sqrt' | 'percent') => void
 }
 
-export function Calculator({ draft, busy = false, disabled = false, onEdit, onOperation, onCalculate, onUnary }: Props) {
+export function Calculator({ draft, busy = false, disabled = false, busyMessage = 'Calculating…', onEdit, onOperation, onCalculate, onUnary }: Props) {
   const locked = busy || disabled
   const op = (name: BinaryOperation, label: string) => <button className="calc-key operation-key" aria-label={label} aria-pressed={draft.operation === name} disabled={locked} onClick={() => onOperation(name)}>{operationSymbols[name]}</button>
   const digit = (value: string, wide = false) => <button className={`calc-key number-key${wide ? ' zero-key' : ''}`} disabled={locked} onClick={() => onEdit({ type: 'digit', value })}>{value}</button>
   const expression = draft.operation ? `${draft.left} ${operationSymbols[draft.operation]}` : draft.expression ? `${draft.expression} =` : 'Ready when you are'
-  return <section className="calculator" aria-label="Calculator">
-    <div className="calc-display"><div className="display-expression" title={expression}>{expression}</div><output id="calculator-display" tabIndex={-1} aria-label="Calculator display" className="display-number" data-long={draft.entry.length > 14 || undefined}>{draft.entry}</output><div className="display-caption">{busy ? 'Calculating…' : draft.result ? 'Result' : draft.awaiting ? 'Enter the next number' : 'Current input'}</div></div>
+  return <section className="calculator" aria-label="Calculator" aria-busy={busy}>
+    <div className="calc-display"><div className="display-expression" title={expression}>{expression}</div><output id="calculator-display" tabIndex={-1} aria-label="Calculator display" className="display-number" data-long={draft.entry.length > 14 || undefined}>{draft.entry}</output><div className="display-caption">{busy ? busyMessage : draft.result ? 'Result' : draft.awaiting ? 'Enter the next number' : 'Current input'}</div></div>
     <div className="advanced-keys"><button aria-label="Power" className="advanced-key" aria-pressed={draft.operation === 'power'} disabled={locked} onClick={() => onOperation('power')}>x<sup>y</sup></button><button aria-label="Square root" className="advanced-key" disabled={locked || Boolean(draft.operation)} onClick={() => onUnary('sqrt')}>√x</button><button aria-label="Percentage" className="advanced-key" disabled={locked || Boolean(draft.operation)} onClick={() => onUnary('percent')}>%</button></div>
     <div className="keypad">
       <button className="calc-key utility-key" aria-label="Clear calculator" disabled={locked} onClick={() => onEdit({ type: 'clear' })}>AC</button>

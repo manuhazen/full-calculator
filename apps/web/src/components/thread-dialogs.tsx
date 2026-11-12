@@ -14,7 +14,7 @@ export function RenameThreadDialog({ thread, busy, onClose, onSave }: { thread: 
   const [error, setError] = useState('')
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<{ name: string }>({ resolver: zodResolver(nameSchema), defaultValues: { name: thread.name } })
   const submit = handleSubmit(async values => { setError(''); try { await onSave(values.name) } catch (error) { setError(error instanceof Error ? error.message : 'Could not rename the thread. Try again.') } })
-  return <Dialog open onOpenChange={open => { if (!open && !busy) onClose() }}><DialogContent><DialogTitle>Rename thread</DialogTitle><DialogDescription>Give these calculations a name that makes sense to you.</DialogDescription><form onSubmit={submit}>
+  return <Dialog open onOpenChange={open => { if (!open && !busy) onClose() }}><DialogContent closeDisabled={busy}><DialogTitle>Rename thread</DialogTitle><DialogDescription>Give these calculations a name that makes sense to you.</DialogDescription><form onSubmit={submit}>
     <label className="field-label" htmlFor="thread-name">Thread name</label><input autoComplete="off" className="text-field" id="thread-name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'name-error' : undefined} {...register('name')} />
     {errors.name && <p id="name-error" className="field-error" role="alert">{errors.name.message}</p>}{error && <p className="field-error" role="alert">{error}</p>}
     <div className="dialog-actions"><Button type="button" variant="outline" disabled={busy} onClick={onClose}>Cancel</Button><Button type="submit" disabled={busy || isSubmitting}>{busy && <LoaderCircle className="animate-spin" />}Save name</Button></div>
