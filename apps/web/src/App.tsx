@@ -5,9 +5,10 @@ import { WorkspaceLayout } from './components/workspace-layout'
 import { ThreadNavigation } from './components/thread-navigation'
 import { DeleteThreadDialog, RenameThreadDialog } from './components/thread-dialogs'
 import { Calculator } from './components/calculator'
+import { CalculationHistory } from './components/calculation-history'
 import { Button } from './components/ui/button'
 import { api, type Calculation, type Thread } from './lib/api'
-import { keys, threadOptions } from './lib/queries'
+import { historyOptions, keys, threadOptions } from './lib/queries'
 import { draftReducer, emptyDraft, operand, submission, type BinaryOperation, type CalculationInput, type Draft, type DraftAction } from './lib/calculator-state'
 
 const selectionKey = 'calculator-workspace:selected-thread'
@@ -19,6 +20,7 @@ export default function App() {
   const threads = useQuery(threadOptions())
   const [preferredId, setPreferredId] = useState<string | null>(rememberedThread)
   const selected = threads.data?.find(thread => thread.id === preferredId) ?? threads.data?.[0] ?? null
+  const history = useQuery(historyOptions(selected?.id ?? ''))
   const [drafts, setDrafts] = useState<Record<string, Draft>>({})
   const draft = selected ? drafts[selected.id] ?? emptyDraft() : emptyDraft()
   const [renameTarget, setRenameTarget] = useState<Thread | null>(null)
@@ -101,7 +103,7 @@ export default function App() {
       {threadError && <div className="error-banner" role="alert"><AlertCircle size={18} /><span>{threadError}</span></div>}
       {threads.isPending ? <div className="workspace-empty" role="status"><LoaderCircle className="animate-spin" /><p>Opening your workspace…</p></div> : threads.isError ? <div className="workspace-empty"><AlertCircle size={30} /><h1>Couldn’t load your threads</h1><p>{message(threads.error)}</p><Button onClick={() => void threads.refetch()}>Try again</Button></div> : !selected ? <div className="workspace-empty"><CalculatorIcon size={34} strokeWidth={1.4} /><h1>A fresh start for your numbers</h1><p>Create a thread to collect related calculations. Pick it up again whenever you need.</p><Button onClick={() => void newThread()} disabled={create.isPending}>{create.isPending ? <LoaderCircle className="animate-spin" /> : <Plus />}Create a thread</Button></div> : <>
         <header className="workspace-heading"><div><h1>{selected.name}</h1><p>A little space to work things out.</p></div><div className="workspace-actions"><Button variant="ghost" size="icon" aria-label="Rename thread" title="Rename thread" onClick={() => setRenameTarget(selected)}><Pencil /></Button><Button variant="ghost" size="icon" aria-label="Delete thread" title="Delete thread" disabled={pendingThread === selected.id} onClick={() => setDeleteTarget(selected)}><Trash2 /></Button></div></header>
-        <div className="workspace-grid"><div className="calculator-column"><Calculator draft={draft} busy={calculate.isPending} onEdit={edit} onOperation={chooseOperation} onCalculate={equals} onUnary={unary} />{draft.error && <div className="error-banner calculation-error" role="alert"><AlertCircle size={18} /><span>{draft.error}</span></div>}</div></div>
+        <div className="workspace-grid"><div className="calculator-column"><Calculator draft={draft} busy={calculate.isPending} onEdit={edit} onOperation={chooseOperation} onCalculate={equals} onUnary={unary} />{draft.error && <div className="error-banner calculation-error" role="alert"><AlertCircle size={18} /><span>{draft.error}</span></div>}</div><CalculationHistory key={selected.id} items={history.data ?? []} loading={history.isPending} error={history.isError ? message(history.error) : null} onRetry={() => void history.refetch()} /></div>
       </>}
     </main>
     {renameTarget && <RenameThreadDialog key={renameTarget.id} thread={renameTarget} busy={rename.isPending} onClose={() => setRenameTarget(null)} onSave={renameThread} />}

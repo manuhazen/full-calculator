@@ -98,6 +98,26 @@ svg { flex-shrink: 0; }
 .error-banner { display: flex; align-items: flex-start; gap: 10px; border: 1px solid #edc6be; border-radius: 10px; padding: 13px 15px; background: #fff5f1; color: #9b3828; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
 .error-banner svg { margin-top: 1px; }
 .calculation-error { margin: 18px 0 0; max-width: 420px; }
+.history-pane { min-width: 0; padding-top: 0; }
+.history-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 41px; padding-bottom: 17px; border-bottom: 1px solid #e3e6dd; }
+.history-heading > div { display: flex; align-items: center; gap: 9px; color: #687561; }
+.history-heading h2 { font-size: 14px; font-weight: 550; color: #4d5846; margin: 0; }
+.history-count { font-size: 11px; color: #848c7d; margin-left: 2px; }
+.history-heading button { min-height: 30px; font-size: 11px; padding-right: 0; }
+.history-heading button svg { width: 13px; height: 13px; }
+.history-empty { text-align: center; padding: 88px 15px 60px; color: #8a9381; }
+.history-empty > svg { margin: 0 auto 19px; }
+.history-empty h3 { font-size: 14px; font-weight: 500; color: #65735a; margin: 0 0 9px; }
+.history-empty p { font-size: 12px; line-height: 1.7; max-width: 210px; margin: auto; color: #7c8672; }
+.history-list { list-style: none; padding: 0 8px 0 0; margin: 0; max-height: 575px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #cfd7c7 transparent; }
+.history-entry { padding: 23px 0; border-bottom: 1px solid #e7e9e2; }
+.history-expression { margin: 0 0 9px; font-size: 13px; color: #7d8774; overflow-wrap: anywhere; line-height: 1.55; font-variant-numeric: tabular-nums; }
+.history-result-row { display: flex; align-items: center; gap: 12px; }
+.history-result { color: #495c3f; font-size: 23px; font-weight: 450; letter-spacing: -.02em; overflow-wrap: anywhere; min-width: 0; flex: 1; font-variant-numeric: tabular-nums; }
+.history-result-row time { font-size: 10px; color: #87917d; white-space: nowrap; }
+.history-feedback { padding: 22px 0; color: #767e6c; font-size: 13px; line-height: 1.6; }
+.history-feedback p { margin: 0 0 12px; }
+@media (max-width: 1199px) { .history-list { max-height: 440px; } .history-empty { padding-block: 45px; } }
 @media (max-width: 1199px) { .workspace-grid { grid-template-columns: minmax(0,1fr); row-gap: 44px; } }
 @media (max-width: 767px) { .workspace-heading { margin-bottom: 25px; gap: 8px; } .workspace-heading p { max-width: 220px; } .workspace-actions { gap: 0; } .thread-row-actions { opacity: 1; top: 2px; } .thread-row-actions button { width: 40px; height: 44px; } .thread-select { padding-right: 90px; } .calculator { max-width: none; } .calc-key { height: 62px; } }
 @media (max-width: 1050px) and (min-width: 768px) { .app-shell { grid-template-columns: 224px minmax(0, 1fr); } .workspace-body { padding-inline: 32px; } }

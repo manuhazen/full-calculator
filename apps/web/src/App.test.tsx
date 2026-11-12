@@ -15,6 +15,18 @@ export function renderWorkspace() {
 beforeEach(() => { vi.restoreAllMocks(); localStorage.clear() })
 
 describe('thread workspace', () => {
+  it('renders chronological history for only the selected thread', async () => {
+    const first = threadFixture('first', 'Budget'), second = threadFixture('second', 'Measurements')
+    const { histories } = mockApi([first, second])
+    histories.first = [{ id: 'calc-a', threadId: 'first', operation: 'add', operands: ['12.50', '7.25'], expression: '12.50 + 7.25', result: '19.75', createdAt: '2026-11-12T12:00:00Z' }, { id: 'calc-b', threadId: 'first', operation: 'divide', operands: ['19.75', '5'], expression: '19.75 / 5', result: '3.95', createdAt: '2026-11-12T12:01:00Z' }]
+    const user = userEvent.setup(); renderWorkspace()
+    const list = await screen.findByRole('list', { name: 'Calculation history' })
+    const rows = within(list).getAllByRole('listitem')
+    expect(rows[0]).toHaveTextContent('12.50 + 7.25'); expect(rows[1]).toHaveTextContent('19.75 / 5')
+    await user.click(screen.getByRole('button', { name: 'Measurements' }))
+    expect(await screen.findByRole('heading', { name: 'No calculations yet' })).toBeInTheDocument()
+    expect(screen.queryByText('12.50 + 7.25')).not.toBeInTheDocument()
+  })
   it('creates, validates renaming and confirms deletion of a thread', async () => {
     mockApi(); const user = userEvent.setup(); renderWorkspace()
     await screen.findByRole('heading', { name: 'A fresh start for your numbers' })
