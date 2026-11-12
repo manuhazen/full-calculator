@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:50:02.4134480Z",
+  "updatedAt": "2026-11-12T15:26:39.5381031Z",
   "features": [
     {
       "id": "F001",
@@ -198,7 +198,7 @@
           {
             "command": "docker compose build; docker compose up -d --wait; Docker Playwright scripts/docker-gate.cjs; docker compose stop; docker compose up -d --wait; docker compose ps; docker compose logs; docker compose exec web npm run build",
             "result": "passed: both builds, startup, rendered React, direct/proxied health, frontend HMR without reload, Go automatic rebuild, readable logs, nonroot data permissions, complete stop/start recovery, frontend TypeScript/production bootstrap build",
-            "executedAt": "2026-11-12T14:50:02.4134480Z"
+            "executedAt": "2026-11-12T14:50:02.413448Z"
           }
         ],
         "blocker": null
@@ -214,7 +214,7 @@
       "title": "Go backend architecture and configuration",
       "phase": 2,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F008"
       ],
@@ -222,7 +222,13 @@
         "Configuration validates environment and handlers, repository, and engine responsibilities remain separate."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./...",
+            "result": "passed: configuration defaults, address/port/origin/CORS validation and bootstrap compile",
+            "executedAt": "2026-11-12T15:26:39.5381031Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
