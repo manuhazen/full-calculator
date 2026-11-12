@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T17:04:14.0758697Z",
+  "updatedAt": "2026-11-12T17:24:50.8777520Z",
   "features": [
     {
       "id": "F001",
@@ -854,6 +854,34 @@
       "notes": [
         "Added from explicit user bug report: new thread shows requested endpoint does not exist and history is absent.",
         "Root cause: Air1.61.7 orphaned an older API during rapid concurrent rebuilds, so later binaries failed to bind8080 and stale routes remained active. PinnedAir1.67.4,1s debounce, unchanged filtering, module watching and12s graceful kill interval fix it. Userdata preserved."
+      ]
+    },
+    {
+      "id": "F038",
+      "title": "Document project prompts and link them from README",
+      "phase": 6,
+      "priority": "high",
+      "status": "completed",
+      "dependencies": ["F032", "F033"],
+      "acceptanceCriteria": [
+        "PROMPTS.md records the complete original user brief and all subsequent user project prompts in chronological order.",
+        "User-selected classic keypad preference and user-provided agent instructions are preserved with clear provenance.",
+        "README links to PROMPTS.md and all local documentation links resolve.",
+        "Docker Prettier verification passes for the documentation and feature tracker."
+      ],
+      "verification": {
+        "checks": [
+          {
+            "command": "Docker formatter prettier --check PROMPTS.md README.md feature-list.json; PowerShell original-section, chronological-prompt inventory, local-link and JSON validation",
+            "result": "passed: complete 13-section original brief and final instruction, ten chronological prompt entries including classic keypad choice, all README/PROMPTS local links resolve, tracker valid, Prettier clean",
+            "executedAt": "2026-11-12T17:24:50.8777520Z"
+          }
+        ],
+        "blocker": null
+      },
+      "notes": [
+        "Added from user request to preserve project prompts; excludes environment metadata, assistant responses, and internal system/developer instructions.",
+        "Original brief and follow-up wording preserved; Markdown normalization disclosed. Original user-provided AGENTS body included once, machine-specific wrapper and automatically repeated context omitted."
       ]
     }
   ]

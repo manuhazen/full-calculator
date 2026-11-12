@@ -2,6 +2,8 @@
 
 A full-stack calculator with named calculation threads and persistent, reusable history. React handles input and presentation; every mathematical operation runs in Go through one REST endpoint. SQLite keeps successful calculations with their thread.
 
+See [Project prompts](PROMPTS.md) for the original assignment, interaction choice, and follow-up requests that shaped this project.
+
 ## Setup instructions
 
 Install Docker with Docker Compose v2. Docker Desktop on Windows/macOS must use **Linux containers**. No host Go, Node.js, database, paid infrastructure, or external service is needed to run the application.
