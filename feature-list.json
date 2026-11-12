@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:01:27.6732614Z",
+  "updatedAt": "2026-11-12T14:22:17.6326496Z",
   "features": [
     {
       "id": "F001",
@@ -55,7 +55,7 @@
       "title": "Go backend Dockerfile and minimal bootstrap",
       "phase": 1,
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         "F002"
       ],
@@ -63,7 +63,13 @@
         "Minimal Go service builds in Docker, reads configuration, serves health, and shuts down gracefully."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose build; docker compose up -d --wait; docker compose exec api go test ./...; GET http://localhost:8080/api/v1/health",
+            "result": "passed: API image built, service healthy, package compiled, health returned status ok",
+            "executedAt": "2026-11-12T14:22:17.6245779Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
