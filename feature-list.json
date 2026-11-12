@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:24:32.6284467Z",
+  "updatedAt": "2026-11-12T14:24:56.7900307Z",
   "features": [
     {
       "id": "F001",
@@ -128,7 +128,7 @@
       "title": "Development hot reload for both services",
       "phase": 1,
       "priority": "high",
-      "status": "not_started",
+      "status": "in_progress",
       "dependencies": [
         "F005"
       ],
@@ -147,7 +147,7 @@
       "title": "Environment configuration and Docker volume setup",
       "phase": 1,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F002",
         "F003",
@@ -158,7 +158,13 @@
         "SQLite data directory is backed by named volume and writable by nonroot API."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose config --quiet; docker compose exec api id; test -w /data; stat /data",
+            "result": "passed: environment defaults valid, named sqlite_data mounted, UID/GID10001 owns writable data directory",
+            "executedAt": "2026-11-12T14:24:56.7829448Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
