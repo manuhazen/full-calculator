@@ -38,6 +38,7 @@ func New(store *repository.Store, cfg config.Config, logger *slog.Logger) http.H
 		r.Get("/threads", a.threads)
 		r.Post("/threads", a.createThread)
 		r.Get("/threads/{id}", a.thread)
+		r.Get("/threads/{id}/calculations", a.history)
 		r.Patch("/threads/{id}", a.renameThread)
 		r.Delete("/threads/{id}", a.deleteThread)
 	})

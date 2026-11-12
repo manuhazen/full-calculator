@@ -11,6 +11,32 @@ import (
 	"github.com/google/uuid"
 )
 
+func (s *Store) Calculations(ctx context.Context, threadID string) ([]models.Calculation, error) {
+	if _, err := s.Thread(ctx, threadID); err != nil {
+		return nil, err
+	}
+	rows, err := s.DB.QueryContext(ctx, "SELECT id,thread_id,operation,operands,expression,result,created_at FROM calculations WHERE thread_id=? ORDER BY sequence ASC", threadID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := make([]models.Calculation, 0)
+	for rows.Next() {
+		var item models.Calculation
+		var operands string
+		var created int64
+		if err := rows.Scan(&item.ID, &item.ThreadID, &item.Operation, &operands, &item.Expression, &item.Result, &created); err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal([]byte(operands), &item.Operands); err != nil {
+			return nil, err
+		}
+		item.CreatedAt = time.UnixMilli(created).UTC()
+		items = append(items, item)
+	}
+	return items, rows.Err()
+}
+
 func (s *Store) SaveCalculation(ctx context.Context, item models.Calculation) (models.Calculation, error) {
 	tx, err := s.DB.BeginTx(ctx, nil)
 	if err != nil {

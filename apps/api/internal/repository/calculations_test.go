@@ -32,3 +32,39 @@ func TestSaveCalculation(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestHistoryPersistsAcrossReopen(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "persistent.db")
+	db, err := Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := New(db)
+	ctx := context.Background()
+	thread, err := s.CreateThread(ctx, "Saved workspace")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{"3", "7"} {
+		if _, err := s.SaveCalculation(ctx, models.Calculation{ThreadID: thread.ID, Operation: "add", Operands: []string{"1", "2"}, Expression: "1 + 2", Result: value}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := db.Close(); err != nil {
+		t.Fatal(err)
+	}
+	db, err = Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	s = New(db)
+	items, err := s.Calculations(ctx, thread.ID)
+	if err != nil || len(items) != 2 || items[0].Result != "3" || items[1].Result != "7" {
+		t.Fatalf("history=%+v,err=%v", items, err)
+	}
+	stored, err := s.Thread(ctx, thread.ID)
+	if err != nil || stored.Name != "Saved workspace" {
+		t.Fatal(stored, err)
+	}
+}

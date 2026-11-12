@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:41:44.2032556Z",
+  "updatedAt": "2026-11-12T15:42:49.1250770Z",
   "features": [
     {
       "id": "F001",
@@ -412,7 +412,7 @@
       "title": "Calculation history persistence and retrieval",
       "phase": 3,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F016"
       ],
@@ -421,7 +421,13 @@
         "History is chronologically ordered and isolated by thread."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test ./internal/repository ./internal/handlers",
+            "result": "passed: persistent chronological history, thread isolation, cascade, original strings, result reuse through unified API, names/history survived database close/reopen",
+            "executedAt": "2026-11-12T15:42:49.1250770Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
