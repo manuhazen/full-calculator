@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:26:39.5381031Z",
+  "updatedAt": "2026-11-12T15:32:07.4866416Z",
   "features": [
     {
       "id": "F001",
@@ -238,7 +238,7 @@
       "title": "SQLite schema and migrations",
       "phase": 2,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F009"
       ],
@@ -247,10 +247,18 @@
         "Foreign keys, WAL, and busy timeout are enabled."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose build api (Go1.27); docker compose exec api go test ./...; database readiness health",
+            "result": "passed: transactional idempotent migrations, schema version, foreign keys, WAL, busy timeout, file0600, data survived close/reopen",
+            "executedAt": "2026-11-12T15:32:07.4866416Z"
+          }
+        ],
         "blocker": null
       },
-      "notes": []
+      "notes": [
+        "Upgraded API image/module toGo1.27 because SQLite1.62 requiresGo>=1.26; initial Go1.25 dependency attempt rejected correctly."
+      ]
     },
     {
       "id": "F011",
