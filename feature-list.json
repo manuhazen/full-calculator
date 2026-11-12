@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:45:04.8737838Z",
+  "updatedAt": "2026-11-12T15:46:33.6721774Z",
   "features": [
     {
       "id": "F001",
@@ -634,7 +634,7 @@
       "title": "Backend API and persistence integration tests",
       "phase": 5,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F012",
         "F017",
@@ -644,7 +644,13 @@
         "httptest with temporary SQLite covers CRUD, persistence, isolation, cascade, JSON validation and statuses."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec api go test -race ./...; docker compose exec api go vet ./...",
+            "result": "passed: httptest/tempSQLite CRUD/all7operations/history/isolation/cascade/status/security/reopen tests plus atomic transaction rollback and per-replacement-connection foreign keys; race detector and vet clean",
+            "executedAt": "2026-11-12T15:46:33.6721774Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []

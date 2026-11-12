@@ -68,3 +68,48 @@ func TestHistoryPersistsAcrossReopen(t *testing.T) {
 		t.Fatal(stored, err)
 	}
 }
+
+func TestCalculationAndThreadTouchAreAtomic(t *testing.T) {
+	db, err := Open(filepath.Join(t.TempDir(), "atomic.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	s := New(db)
+	ctx := context.Background()
+	thread, err := s.CreateThread(ctx, "Atomic")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = db.Exec("CREATE TRIGGER reject_touch BEFORE UPDATE ON threads BEGIN SELECT RAISE(ABORT,'simulated failure'); END")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = s.SaveCalculation(ctx, models.Calculation{ThreadID: thread.ID, Operation: "add", Operands: []string{"1", "2"}, Expression: "1 + 2", Result: "3"})
+	if err == nil {
+		t.Fatal("expected simulated update failure")
+	}
+	items, err := s.Calculations(ctx, thread.ID)
+	if err != nil || len(items) != 0 {
+		t.Fatalf("partial calculation persisted: %+v,err=%v", items, err)
+	}
+	stored, err := s.Thread(ctx, thread.ID)
+	if err != nil || !stored.UpdatedAt.Equal(thread.UpdatedAt) {
+		t.Fatal(stored, err)
+	}
+}
+
+func TestForeignKeysApplyToReplacementConnections(t *testing.T) {
+	db, err := Open(filepath.Join(t.TempDir(), "connections.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	db.SetMaxIdleConns(0)
+	for range 3 {
+		var enabled int
+		if err := db.QueryRow("PRAGMA foreign_keys").Scan(&enabled); err != nil || enabled != 1 {
+			t.Fatalf("foreign_keys=%d,error=%v", enabled, err)
+		}
+	}
+}
