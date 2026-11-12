@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T15:58:08.2038062Z",
+  "updatedAt": "2026-11-12T16:01:20.1065906Z",
   "features": [
     {
       "id": "F001",
@@ -512,7 +512,7 @@
       "title": "Calculator display and keypad",
       "phase": 4,
       "priority": "high",
-      "status": "not_started",
+      "status": "completed",
       "dependencies": [
         "F020"
       ],
@@ -520,7 +520,13 @@
         "Classic keypad supports string input, operations, clear, backspace and backend-only calculation."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose exec web: npm run typecheck; npm run lint; npm test -- --run",
+            "result": "passed: 6tests cover decimal/sign/backspace/clear, string-only limits, operator replacement, structured submission, server result presentation and result chaining; no browser arithmetic engine",
+            "executedAt": "2026-11-12T16:01:20.1065906Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
