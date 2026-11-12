@@ -1,7 +1,7 @@
 {
   "project": "Calculator Workspace",
   "schemaVersion": 1,
-  "updatedAt": "2026-11-12T14:22:17.6326496Z",
+  "updatedAt": "2026-11-12T14:23:21.8442800Z",
   "features": [
     {
       "id": "F001",
@@ -79,7 +79,7 @@
       "title": "React frontend Dockerfile and minimal bootstrap",
       "phase": 1,
       "priority": "high",
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         "F002"
       ],
@@ -87,7 +87,13 @@
         "Minimal React TypeScript Vite application builds and starts inside Docker."
       ],
       "verification": {
-        "checks": [],
+        "checks": [
+          {
+            "command": "docker compose build; docker compose up -d --wait; docker compose exec web npm run typecheck; docker compose exec web npm run build; GET http://localhost:5173",
+            "result": "passed: frontend healthy, TypeScript and production bootstrap build passed, HTML returned 200",
+            "executedAt": "2026-11-12T14:23:21.8370969Z"
+          }
+        ],
         "blocker": null
       },
       "notes": []
